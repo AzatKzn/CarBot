@@ -32,19 +32,12 @@ namespace CarBot
 			{
 				var message = new StringBuilder();
 				message.Append("Доступные тачки: ");
-<<<<<<< HEAD
 				int i = 1;
 				foreach (var car in cars)
 				{
 					var str = "{0}.{1} - {2}. ";
 					message.Append(string.Format(str, i, car.Name, car.Cost));
 					i++;
-=======
-				foreach (var car in cars)
-				{
-					var str = "{0}, цена {1}, ";
-					message.Append(string.Format(str, car.Name, car.Cost));
->>>>>>> 2a3cc5e2ddfc9a09f81bb7204f3d2ee032ed813c
 				}
 				var response = message.ToString().Trim();
 				response = response.Remove(response.Length - 1) + ".";

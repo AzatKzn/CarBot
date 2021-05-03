@@ -18,10 +18,7 @@ namespace CarBot
 				{
 					var history = dbContext.GetLastHistory(user, ActionType.TestDrive);
 					TimeSpan timeLeft = new TimeSpan();
-<<<<<<< HEAD
 					string message;
-=======
->>>>>>> 2a3cc5e2ddfc9a09f81bb7204f3d2ee032ed813c
 					if (CanSoloRace(history, ref timeLeft))
 					{
 						Thread.Sleep(4000);
@@ -40,21 +37,11 @@ namespace CarBot
 						user.Money += money;
 						dbContext.Histories.Add(GetHistory(user, ActionType.TestDrive));
 						dbContext.SaveChanges();
-<<<<<<< HEAD
 						message = string.Format("@{0}, ты получил за тест драйв {1} опыта и {2} денег", e.ChatMessage.Username, exp, money);
 					}
 					else					
 						message = string.Format("@{0}, следующий тест драйв будет доступен через {1}.", e.ChatMessage.Username, timeLeft.ToString("mm\\:ss"));
 					bot.SendMessage(e.ChatMessage.Channel, message);
-=======
-						var message = string.Format("@{0}, ты получил за тест драйв {1} опыта и {2} денег", e.ChatMessage.Username, exp, money);
-						bot.SendMessage(e.ChatMessage.Channel, message);
-					}
-					else
-					{
-						var message = string.Format("@{0}, следующий тест драйв будет доступен через {1}.", e.ChatMessage.Username, timeLeft.ToString("mm\\:ss"));
-					}
->>>>>>> 2a3cc5e2ddfc9a09f81bb7204f3d2ee032ed813c
 				}
 			}
 		}

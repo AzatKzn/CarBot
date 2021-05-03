@@ -22,7 +22,6 @@ namespace CarBot
 				}
 				Bot bot = new Bot();
 				while (true) ;
-
 			}
 			catch (Exception ex)
 			{
