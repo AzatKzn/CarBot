@@ -23,25 +23,25 @@ namespace CarBot
 					{
 						Thread.Sleep(4000);
 						var random = new Random();
-						var luck = (100 + 1 * random.Next(1, 6)) / (double)100;
-						var atten = (100 + 1 * random.Next(0, 3)) / (double)100;
-						var react = (100 + 1 * random.Next(0, 4)) / (double)100;
-						var courage = (100 + 1 * random.Next(-3, 6)) / (double)100;
-						var cunning = (100 + 1 * random.Next(1, 4)) / (double)100;
-						var min = (luck * atten * react * courage * cunning);
-						var expD = random.Next((int)(min * 200), 500) * min;
+						var luck = user.Luck;
+						double atten = (100 + 1 * random.Next(0, 3)) / (double)100;
+						double react = (100 + 1 * random.Next(0, 4)) / (double)100;
+						double courage = (100 + 1 * random.Next(-3, 10)) / (double)100;
+						double cunning = (100 + 1 * random.Next(1, 4)) / (double)100;
+						double min = (atten * react * courage * cunning);
+						double expD = random.Next((int)(222), 400) * min * Math.Pow(random.Next(139, 160) / (double)100, luck - 1);
 						var exp = (int)expD;
-						var moneyKF = min;
-						var money = (int)(expD * moneyKF);
 						user.Experience += exp;
+						var moneyKF = min;
+						var money = (int)(expD * (random.Next(90, 109) / (double)100));
 						user.Money += money;
 						dbContext.Histories.Add(GetHistory(user, ActionType.TestDrive));
 						dbContext.SaveChanges();
-						message = string.Format("@{0}, ты получил за тест драйв {1} опыта и {2} денег", e.ChatMessage.Username, exp, money);
+						message = string.Format("!testdrive ▶{0}, за тест драйв получено {1} опыта и {2} денег", e.ChatMessage.Username, exp, money);
 					}
 					else					
-						message = string.Format("@{0}, следующий тест драйв будет доступен через {1}.", e.ChatMessage.Username, timeLeft.ToString("mm\\:ss"));
-					bot.SendMessage(e.ChatMessage.Channel, message);
+						message = string.Format("!testdrive ▶{0}, следующий тест драйв будет доступен через {1}.", e.ChatMessage.Username, timeLeft.ToString("mm\\:ss"));
+					bot.SendWhisper(e.ChatMessage.Channel, e.ChatMessage.Username, message);
 				}
 			}
 		}

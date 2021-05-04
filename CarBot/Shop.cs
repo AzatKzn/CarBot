@@ -61,11 +61,5 @@ namespace CarBot
 			}
 			return text;
 		}
-
-		public static void BuyAuto(OnMessageReceivedArgs e, Bot bot)
-		{
-			var message = "";
-			bot.SendMessage(e.ChatMessage.Channel, message);
-		}
 	}
 }

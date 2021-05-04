@@ -37,15 +37,15 @@ namespace CarBot
                     context.SaveChanges();
                     if (result.IsSuccess)
                     {
-                        message = string.Format("@{0}, ваша характеристика \"{1}\" увеличина до {2}.",
+                        message = string.Format("!lvlup ▶{0}, ваша характеристика \"{1}\" увеличина до {2}.",
                                                 e.ChatMessage.Username, propety, result.NewLVL);
                     }
                     else 
                     {
-                        message = string.Format("@{0}, для повышения характеристики {1} не хватает {2} опыта.",
+                        message = string.Format("!lvlup ▶{0}, для повышения характеристики {1} не хватает {2} опыта.",
                                                 e.ChatMessage.Username, propety, result.NeedExp);
                     }
-                    bot.SendMessage(e.ChatMessage.Channel, message);
+                    bot.SendWhisper(e.ChatMessage.Channel, e.ChatMessage.Username, message);
                 }
                 
             }
@@ -104,7 +104,7 @@ namespace CarBot
                     }
                 case "luck":
                     {
-                        isCanUpdate = IsEnoughMoney(user.Experience, user.Luck, out remove);
+                        isCanUpdate = IsEnoughMoney(user.Experience, user.Luck, out remove, true);
                         if (isCanUpdate)
                         {
                             user.Experience -= remove;
@@ -127,13 +127,21 @@ namespace CarBot
         /// <param name="currentLVL">текущий уровень хар-ки</param>
         /// <param name="remove">Количество опыта на апгрейд</param>
         /// <returns></returns>
-        static bool IsEnoughMoney(long exp, int currentLVL, out int remove)
+        static bool IsEnoughMoney(long exp, int currentLVL, out int remove, bool IsLuckProperty = false)
         {
-            remove = 0;
-            if (currentLVL < 9)
-                remove = Configuration.LVLCost[currentLVL];
-            else if (currentLVL > 9)
-                remove = Configuration.LVLCost[10];
+            
+            if (!IsLuckProperty)
+            {
+                remove = 0;
+                if (currentLVL < 9)
+                    remove = Configuration.LVLCost[currentLVL];
+                else if (currentLVL > 9)
+                    remove = Configuration.LVLCost[10];
+            }
+            else 
+            {
+                remove = (currentLVL - 1) * 10000;
+            }
             return exp >= remove && remove != 0 ? true : false;
 		}
 
@@ -172,8 +180,8 @@ namespace CarBot
                     //userContext.Cars.Add(car);
                     userContext.SaveChanges();
 
-                    var message = @"@{0}, Теперь повышай свои характеристики и копи деньги, участвуя в тест драйвах";
-                    bot.SendMessage(e.ChatMessage.Channel, string.Format(message, user.Login));
+                    var message = @"!start ▶{0}, Теперь повышай свои характеристики и копи деньги, участвуя в тест драйвах";
+                    bot.SendWhisper(e.ChatMessage.Channel, e.ChatMessage.Username, string.Format(message, e.ChatMessage.Username));
                 }
             }
         }

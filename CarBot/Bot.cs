@@ -41,9 +41,7 @@ namespace CarBot
 
         private void Client_OnMessageReceived(object sender, OnMessageReceivedArgs e)
         {
-            CheckMessage(e);
-            Console.WriteLine("Message recevied from channel: {0}. Message from {1}: {2}", 
-                        e.ChatMessage.Channel, e.ChatMessage.Username, e.ChatMessage.Message);
+            CheckMessage(e);           
         }
 
         public async void CheckMessage(OnMessageReceivedArgs e)
@@ -60,7 +58,7 @@ namespace CarBot
                         UserActions.ShowInfo(e, this);
                         break;
                     case "!shop": // доступные для покупки машины
-                        ShopAction.ShowCarsForSale(e, this);
+                        //ShopAction.ShowCarsForSale(e, this);
                         break;
                     case "!testdrive": // тестовый зазд
                         Races.SoloRace(e, this);
@@ -81,7 +79,7 @@ namespace CarBot
                             }
                             if (message.StartsWith("!buy"))
                             {
-                                ShopAction.BuyAuto(e, this);
+                                //ShopAction.BuyAuto(e, this);
                             }
                             break;
                         }
@@ -97,10 +95,16 @@ namespace CarBot
             SendMessage(channel, message);
         }
 
+        public void SendWhisper(string channel, string user, string message)
+        {
+            var str = string.Format("/w {0} {1}", user, message);
+            client.SendMessage(channel, str);
+		}
+
         public void SendMessage(string channel, string message)
         {
             client.SendMessage(channel, message);
-            Console.WriteLine("Message sent to channel: {0}. Content of message: {1}", channel, message);
+            //Console.WriteLine("Message sent to channel: {0}. Content of message: {1}", channel, message);
         }
     }
 }
