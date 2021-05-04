@@ -37,11 +37,11 @@ namespace CarBot
 						user.Money += money;
 						dbContext.Histories.Add(GetHistory(user, ActionType.TestDrive));
 						dbContext.SaveChanges();
-						message = string.Format("!testdrive ▶{0}, за тест драйв получено {1} опыта и {2} денег", e.ChatMessage.Username, exp, money);
+						message = string.Format("@{0}, за тест драйв получено {1} опыта и {2} денег", e.ChatMessage.Username, exp, money);
 					}
 					else					
-						message = string.Format("!testdrive ▶{0}, следующий тест драйв будет доступен через {1}.", e.ChatMessage.Username, timeLeft.ToString("mm\\:ss"));
-					bot.SendWhisper(e.ChatMessage.Channel, e.ChatMessage.Username, message);
+						message = string.Format("@{0}, следующий тест драйв будет доступен через {1}.", e.ChatMessage.Username, timeLeft.ToString("mm\\:ss"));
+					bot.SendMessage(e.ChatMessage.Channel,message);
 				}
 			}
 		}

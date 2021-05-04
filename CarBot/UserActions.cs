@@ -37,15 +37,15 @@ namespace CarBot
                     context.SaveChanges();
                     if (result.IsSuccess)
                     {
-                        message = string.Format("!lvlup ▶{0}, ваша характеристика \"{1}\" увеличина до {2}.",
+                        message = string.Format("@{0}, ваша характеристика \"{1}\" увеличина до {2}.",
                                                 e.ChatMessage.Username, propety, result.NewLVL);
                     }
                     else 
                     {
-                        message = string.Format("!lvlup ▶{0}, для повышения характеристики {1} не хватает {2} опыта.",
+                        message = string.Format("@{0}, для повышения характеристики {1} не хватает {2} опыта.",
                                                 e.ChatMessage.Username, propety, result.NeedExp);
                     }
-                    bot.SendWhisper(e.ChatMessage.Channel, e.ChatMessage.Username, message);
+                    bot.SendMessage(e.ChatMessage.Channel, message);
                 }
                 
             }
@@ -176,12 +176,10 @@ namespace CarBot
                 {
                     var user = GetNewUser(e.ChatMessage.UserId, e.ChatMessage.Username);
                     userContext.Users.Add(user);
-                    //var car = CreateDefaultCarForUser(user);
-                    //userContext.Cars.Add(car);
                     userContext.SaveChanges();
 
-                    var message = @"!start ▶{0}, Теперь повышай свои характеристики и копи деньги, участвуя в тест драйвах";
-                    bot.SendWhisper(e.ChatMessage.Channel, e.ChatMessage.Username, string.Format(message, e.ChatMessage.Username));
+                    var message = "@{0}, Теперь повышай свои характеристики и копи деньги, участвуя в тест драйвах";
+                    bot.SendMessage(e.ChatMessage.Channel, string.Format(message, e.ChatMessage.Username));
                 }
             }
         }
