@@ -5,6 +5,7 @@ using TwitchLib.Client.Events;
 using TwitchLib.Client.Models;
 using TwitchLib.Communication.Clients;
 using TwitchLib.Communication.Models;
+using CarBot.Races;
 
 namespace CarBot
 {
@@ -40,7 +41,7 @@ namespace CarBot
 		}
 
         private void Client_OnMessageReceived(object sender, OnMessageReceivedArgs e)
-        {
+        {            
             CheckMessage(e);           
         }
 
@@ -61,13 +62,13 @@ namespace CarBot
                         //ShopAction.ShowCarsForSale(e, this);
                         break;
                     case "!testdrive": // тестовый зазд
-                        Races.SoloRace(e, this);
+                        SoloRaces.Race(e, this);
                         break;
                     case "!iirace":  // гонка с компьютером
+                        //RaceWithII.Race(e, this);
                         break;
                     case "!car": // инфа об авто
                         break;
-                    // можно убрать
                     case "!start": // команда для начала игры
                         UserActions.CreateUser(e, this);
                         break;
@@ -79,7 +80,7 @@ namespace CarBot
                             }
                             if (message.StartsWith("!buy"))
                             {
-                                //ShopAction.BuyAuto(e, this);
+                                ShopAction.BuyAuto(e, this);
                             }
                             break;
                         }
@@ -104,7 +105,6 @@ namespace CarBot
         public void SendMessage(string channel, string message)
         {
             client.SendMessage(channel, message);
-            //Console.WriteLine("Message sent to channel: {0}. Content of message: {1}", channel, message);
         }
     }
 }

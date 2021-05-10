@@ -11,34 +11,19 @@ namespace CarBot.Models
 		public int Id { get; set; }
 
 		/// <summary>
-		/// Владельца машины
+		/// Владелец машины
 		/// </summary>
 		public User User { get; set; }
 
 		/// <summary>
-		/// Название машины
+		/// Авто
 		/// </summary>
-		public string Name { get; set; }
+		public Auto Auto { get; set; }
 
 		/// <summary>
-		/// Скорость
+		/// Дата покупки
 		/// </summary>
-		public int Speed { get; set; }
-
-		/// <summary>
-		/// Маневренность 
-		/// </summary>
-		public int Mobility { get; set; }
-
-		/// <summary>
-		/// Разгон
-		/// </summary>
-		public int Overclocking { get; set; }
-
-		/// <summary>
-		/// Торможение
-		/// </summary>
-		public int Braking { get; set; }
+		public DateTime BuyDate { get; set; }
 
 		/// <summary>
 		/// Прочность

@@ -27,7 +27,7 @@ namespace CarBot
         {            
             using (var context = new AppDbContext())
             {
-                var user = context.Get(e.ChatMessage.UserId);
+                var user = context.GetUser(e.ChatMessage.UserId);
                 string propety;
                 var message = "";
                 UpgradeResult result; 
@@ -40,11 +40,14 @@ namespace CarBot
                         message = string.Format("@{0}, ваша характеристика \"{1}\" увеличина до {2}.",
                                                 e.ChatMessage.Username, propety, result.NewLVL);
                     }
-                    else 
+                    else if (!result.IsSuccess && result.NeedExp != 0)
                     {
-                        message = string.Format("@{0}, для повышения характеристики {1} не хватает {2} опыта.",
+                        message = string.Format("@{0}, для повышения характеристики \"{1}\" не хватает {2} опыта.",
                                                 e.ChatMessage.Username, propety, result.NeedExp);
                     }
+                    else if (!result.IsSuccess && result.NewLVL == -1)
+                        message = string.Format("@{0}, ваша характеристика \"{1}\" максимального уровня.", 
+                                                e.ChatMessage.Username, propety);
                     bot.SendMessage(e.ChatMessage.Channel, message);
                 }
                 
@@ -115,6 +118,8 @@ namespace CarBot
                     }
             }
             int needExp = 0;
+            if (!isCanUpdate && remove == 0)
+                return new UpgradeResult() { IsSuccess = false, NewLVL = -1 };
             if (!isCanUpdate)
                 needExp = remove - (int)user.Experience;
             return new UpgradeResult() { IsSuccess = isCanUpdate, NewLVL = newLVL, NeedExp = needExp };
@@ -129,10 +134,11 @@ namespace CarBot
         /// <returns></returns>
         static bool IsEnoughMoney(long exp, int currentLVL, out int remove, bool IsLuckProperty = false)
         {
-            
+            remove = 0;
             if (!IsLuckProperty)
             {
-                remove = 0;
+                if (currentLVL == 99)
+                    return false;
                 if (currentLVL < 9)
                     remove = Configuration.LVLCost[currentLVL];
                 else if (currentLVL > 9)
@@ -140,7 +146,9 @@ namespace CarBot
             }
             else 
             {
-                remove = (currentLVL - 1) * 10000;
+                if (currentLVL == 7)
+                    return false;
+                remove = currentLVL * 10000;                
             }
             return exp >= remove && remove != 0 ? true : false;
 		}
@@ -171,7 +179,7 @@ namespace CarBot
         {
             using (var userContext = new AppDbContext())
             {
-                bool isCreated = userContext.Get(e.ChatMessage.UserId) == null ? false : true;
+                bool isCreated = userContext.GetUser(e.ChatMessage.UserId) == null ? false : true;
                 if (!isCreated)
                 {
                     var user = GetNewUser(e.ChatMessage.UserId, e.ChatMessage.Username);

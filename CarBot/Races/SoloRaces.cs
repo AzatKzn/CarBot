@@ -5,15 +5,16 @@ using System.Linq;
 using System.Threading;
 using TwitchLib.Client.Events;
 
-namespace CarBot
-{
-	class Races
-	{
-		public static void SoloRace(OnMessageReceivedArgs e, Bot bot)
+namespace CarBot.Races
+{	
+	static class SoloRaces
+	{		
+		#region solo race
+		public static void Race(OnMessageReceivedArgs e, Bot bot)
 		{
 			using (var dbContext = new AppDbContext())
 			{
-				var user = dbContext.Get(e.ChatMessage.UserId);
+				var user = dbContext.GetUser(e.ChatMessage.UserId);
 				if (user != null)
 				{
 					var history = dbContext.GetLastHistory(user, ActionType.TestDrive);
@@ -21,19 +22,10 @@ namespace CarBot
 					string message;
 					if (CanSoloRace(history, ref timeLeft))
 					{
-						Thread.Sleep(4000);
-						var random = new Random();
-						var luck = user.Luck;
-						double atten = (100 + 1 * random.Next(0, 3)) / (double)100;
-						double react = (100 + 1 * random.Next(0, 4)) / (double)100;
-						double courage = (100 + 1 * random.Next(-3, 10)) / (double)100;
-						double cunning = (100 + 1 * random.Next(1, 4)) / (double)100;
-						double min = (atten * react * courage * cunning);
-						double expD = random.Next((int)(222), 400) * min * Math.Pow(random.Next(139, 160) / (double)100, luck - 1);
-						var exp = (int)expD;
+						Thread.Sleep(3000);
+						int exp, money;
+						CountResult(out exp, out money, user);
 						user.Experience += exp;
-						var moneyKF = min;
-						var money = (int)(expD * (random.Next(90, 109) / (double)100));
 						user.Money += money;
 						dbContext.Histories.Add(GetHistory(user, ActionType.TestDrive));
 						dbContext.SaveChanges();
@@ -46,7 +38,20 @@ namespace CarBot
 			}
 		}
 
-		private static void DecStrength(User user)
+		static void CountResult(out int exp, out int money, User user)
+		{
+			var random = new Random();
+			double atten = (100 + user.Attentiveness * random.Next(0, 3)) / (double)100;
+			double react = (100 + user.SpeedReaction * random.Next(0, 4)) / (double)100;
+			double courage = (100 + user.Сourage * random.Next(-3, 10)) / (double)100;
+			double cunning = (100 + user.Сunning * random.Next(1, 4)) / (double)100;
+			double min = (atten * react * courage * cunning);
+			double expD = random.Next(222, 400) * min * Math.Pow(random.Next(139, 160) / (double)100, user.Luck - 1); // rand(222,400) * (rand(139, 160)/100) ^^ (luck - 1) 
+			exp = (int)expD;
+			money = (int)(expD * (random.Next(90, 109) / (double)100));
+		}
+
+		static void DecStrength(User user)
 		{
 			using (var carContext = new AppDbContext())
 			{
@@ -57,7 +62,7 @@ namespace CarBot
 			}
 		}
 
-		private static bool CanSoloRace(History history, ref TimeSpan time)
+		static bool CanSoloRace(History history, ref TimeSpan time)
 		{
 			if (history == null)
 				return true;
@@ -68,9 +73,10 @@ namespace CarBot
 			return false;
 		}
 
-		private static History GetHistory(User user, ActionType actionType)
+		static History GetHistory(User user, ActionType actionType)
 		{
 			return new History() { User = user, ActionType = actionType, Date = DateTime.Now };
 		}
+		#endregion
 	}
 }
