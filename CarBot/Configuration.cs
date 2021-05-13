@@ -12,9 +12,12 @@ namespace CarBot
         public static string BotName { get; private set; }
         public static string Channel { get; private set; }
         public static string OAuth { get; private set; }
+        
 
         public static string ShopPath { get; private set; }
         public static int TestDriveTimeOutMinutes { get; private set; }
+        public static int RaceWithAITimeOutMinutes { get; private set; }
+        public static int ShopShowMinutes { get; private set; }
         public static Dictionary<int, int> LVLCost { get; private set; }
 
         public static void LoadConfig()
@@ -35,7 +38,8 @@ namespace CarBot
             ShopPath = Path.Combine(Directory.GetCurrentDirectory(), "AutoShop.json");
 
             TestDriveTimeOutMinutes = Convert.ToInt32(config.GetSection("TestDriveTimeOutMinutes").Value);
-
+            RaceWithAITimeOutMinutes = Convert.ToInt32(config.GetSection("RaceWithAITimeOutMinutes").Value);
+            ShopShowMinutes = Convert.ToInt32(config.GetSection("ShopShowMinutes").Value);
             // стоимость улучшения характеристик
             LVLCost = new Dictionary<int, int>();
             LVLCost.Add(1, Convert.ToInt32(config.GetSection("LVLUPCost:LVL1").Value));

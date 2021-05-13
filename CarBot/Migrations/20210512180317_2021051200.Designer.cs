@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarBot.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210510110829_2021051000")]
-    partial class _2021051000
+    [Migration("20210512180317_2021051200")]
+    partial class _2021051200
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -135,6 +135,12 @@ namespace CarBot.Migrations
 
                     b.Property<int?>("AutoId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("BuyDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<int>("Strength")
                         .HasColumnType("int");

@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CarBot.Migrations
 {
-    public partial class _2021051000 : Migration
+    public partial class _2021051200 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -32,6 +33,20 @@ namespace CarBot.Migrations
                 table: "Cars",
                 type: "int",
                 nullable: true);
+
+            migrationBuilder.AddColumn<DateTime>(
+                name: "BuyDate",
+                table: "Cars",
+                type: "datetime(6)",
+                nullable: false,
+                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+
+            migrationBuilder.AddColumn<bool>(
+                name: "IsActive",
+                table: "Cars",
+                type: "tinyint(1)",
+                nullable: false,
+                defaultValue: false);
 
             migrationBuilder.CreateTable(
                 name: "Autos",
@@ -86,6 +101,14 @@ namespace CarBot.Migrations
 
             migrationBuilder.DropColumn(
                 name: "AutoId",
+                table: "Cars");
+
+            migrationBuilder.DropColumn(
+                name: "BuyDate",
+                table: "Cars");
+
+            migrationBuilder.DropColumn(
+                name: "IsActive",
                 table: "Cars");
 
             migrationBuilder.AddColumn<int>(

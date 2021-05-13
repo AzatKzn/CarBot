@@ -27,6 +27,7 @@ namespace CarBot.Races
 						CountResult(out exp, out money, user);
 						user.Experience += exp;
 						user.Money += money;
+						user.Login = e.ChatMessage.Username;
 						dbContext.Histories.Add(GetHistory(user, ActionType.TestDrive));
 						dbContext.SaveChanges();
 						message = string.Format("@{0}, за тест драйв получено {1} опыта и {2} денег", e.ChatMessage.Username, exp, money);
@@ -49,17 +50,6 @@ namespace CarBot.Races
 			double expD = random.Next(222, 400) * min * Math.Pow(random.Next(139, 160) / (double)100, user.Luck - 1); // rand(222,400) * (rand(139, 160)/100) ^^ (luck - 1) 
 			exp = (int)expD;
 			money = (int)(expD * (random.Next(90, 109) / (double)100));
-		}
-
-		static void DecStrength(User user)
-		{
-			using (var carContext = new AppDbContext())
-			{
-				var car = carContext.Cars.Where(x => x.User.Id == user.Id).FirstOrDefault();
-				if (car.Strength > 0)
-					car.Strength--;
-				carContext.SaveChanges();
-			}
 		}
 
 		static bool CanSoloRace(History history, ref TimeSpan time)

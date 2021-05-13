@@ -19,6 +19,25 @@ namespace CarBot
     /// </summary>
     class UserActions
     {
+
+        public static void ShowUserCar(OnMessageReceivedArgs e, Bot bot)
+        {
+            using (var context = new AppDbContext())
+            {
+                var user = context.GetUser(e.ChatMessage.UserId);
+                if (user == null)
+                    return;
+                var userCar = context.GetUserCar(user.Id);
+                if (userCar == null)
+                    return;
+                var auto = userCar.Auto;
+                var message = string.Format("@{0}, твоя тачка: {1}, скорость - {2}, маневренность - {3}," +
+                                            " разгон - {4}, торможение - {5}, прочность - {6}.", user.Login,
+                                            auto.Name, auto.Speed, auto.Mobility, auto.Overclocking, auto.Braking, userCar.Strength.ToString("0.0"));
+                bot.SendMessage(e.ChatMessage.Channel, message);
+            }
+		}
+
         /// <summary>
         /// Повышение характеристики
         /// </summary>

@@ -35,6 +35,16 @@ namespace CarBot.Models
 		public int Victories { get; set; }
 
 		/// <summary>
+		/// Количество гонок с ИИ
+		/// </summary>
+		public int RaceCountWithAI { get; set; }
+
+		/// <summary>
+		/// Побед с ИИ
+		/// </summary>
+		public int VictoriesWithAI { get; set; }
+
+		/// <summary>
 		/// Внимательность
 		/// </summary>
 		public int Attentiveness { get; set; }

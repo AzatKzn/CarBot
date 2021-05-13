@@ -3,14 +3,16 @@ using System;
 using CarBot.DBContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CarBot.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210513155414_2021051300")]
+    partial class _2021051300
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,9 +32,6 @@ namespace CarBot.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool>("IsEnabled")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<bool>("IsShow")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<int>("Mobility")
@@ -108,9 +107,6 @@ namespace CarBot.Migrations
                     b.Property<int>("RaceCount")
                         .HasColumnType("int");
 
-                    b.Property<int>("RaceCountWithAI")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("RegistrationDate")
                         .HasColumnType("datetime(6)");
 
@@ -118,9 +114,6 @@ namespace CarBot.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Victories")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VictoriesWithAI")
                         .HasColumnType("int");
 
                     b.Property<int>("Сourage")

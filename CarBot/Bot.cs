@@ -15,6 +15,7 @@ namespace CarBot
         readonly string BotName = Configuration.BotName;
         readonly string OAuth = Configuration.OAuth;
         readonly string ChannelName = Configuration.Channel;
+        bool isOn = true;
 
         public Bot()
         {
@@ -41,8 +42,11 @@ namespace CarBot
 		}
 
         private void Client_OnMessageReceived(object sender, OnMessageReceivedArgs e)
-        {            
-            CheckMessage(e);           
+        {
+            if (isOn)
+                CheckMessage(e);
+            else
+                AdminCommands(e);
         }
 
         public async void CheckMessage(OnMessageReceivedArgs e)
@@ -59,33 +63,58 @@ namespace CarBot
                         UserActions.ShowInfo(e, this);
                         break;
                     case "!shop": // доступные для покупки машины
-                        //ShopAction.ShowCarsForSale(e, this);
+                        ShopAction.ShowCarsForSale(e, this);
                         break;
                     case "!testdrive": // тестовый зазд
                         SoloRaces.Race(e, this);
                         break;
                     case "!iirace":  // гонка с компьютером
-                        //RaceWithII.Race(e, this);
+                        RaceWithAI.Race(e, this);
                         break;
                     case "!car": // инфа об авто
+                        UserActions.ShowUserCar(e, this);
                         break;
                     case "!start": // команда для начала игры
                         UserActions.CreateUser(e, this);
-                        break;
+                        break;                    
                     default:
                         {
                             if (message.StartsWith("!lvlup"))
                             {
                                 UserActions.Upgrade(e, this);
                             }
-                            if (message.StartsWith("!buy"))
+                            else if (message.StartsWith("!buy"))
                             {
                                 ShopAction.BuyAuto(e, this);
                             }
+
+                            AdminCommands(e);                                                        
                             break;
                         }
                 }
             });
+        }
+
+        void AdminCommands(OnMessageReceivedArgs e)
+        {
+            if (e.ChatMessage.IsBroadcaster)
+            {
+                switch (e.ChatMessage.Message.ToLower())
+                {
+                    case "!shopchange":
+                        if (isOn)
+                        ShopAction.ChangeCars(e, this);
+                        break;
+                    case "!on":
+                        isOn = true;
+                        SendMessage(e.ChatMessage.Channel, "Бот включен!!!");
+                        break;
+                    case "!off":
+                        isOn = false;
+                        SendMessage(e.ChatMessage.Channel, "Бот выключен!!!");
+                        break;
+                }
+            }
         }
 
         public void ShowGameInfo(string channel)

@@ -8,7 +8,10 @@ namespace CarBot.Models
 {
 	class UserCar
 	{
+
 		public int Id { get; set; }
+
+		public bool IsActive { get; set; }
 
 		/// <summary>
 		/// Владелец машины
@@ -28,6 +31,6 @@ namespace CarBot.Models
 		/// <summary>
 		/// Прочность
 		/// </summary>
-		public int Strength { get; set; }
+		public float Strength { get; set; }
 	}
 }
