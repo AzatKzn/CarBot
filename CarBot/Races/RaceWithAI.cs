@@ -2,6 +2,7 @@
 using CarBot.DbSetExtensions;
 using CarBot.Models;
 using System;
+using System.Threading;
 using TwitchLib.Client.Events;
 
 namespace CarBot.Races
@@ -50,9 +51,9 @@ namespace CarBot.Races
 
 				if (userCar.Strength > 0)
 					userCar.Strength -= 0.5f;
-				if (userCar.Strength <= 0)
+				else if (userCar.Strength <= 0)
 					userCar.IsActive = false;
-
+				Thread.Sleep(2000);
 				context.SaveChanges();
 				bot.SendMessage(e.ChatMessage.Channel, message);
 			}

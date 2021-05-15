@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarBot.Models
 {
@@ -13,5 +10,10 @@ namespace CarBot.Models
 		public virtual List<User> Participants { get; set;}
 
 		public DateTime CreateDate { get; set; }
+
+		public void AddParticipant(User user)
+		{
+			this.Participants.Add(user);
+		}
 	}
 }

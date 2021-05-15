@@ -74,5 +74,9 @@ namespace CarBot.Models
 		/// </summary>
 		public DateTime RegistrationDate { get; set; }
 
+		/// <summary>
+		/// Количество тест драйвов
+		/// </summary>
+		public int TestDrivesCount { get; set; }
 	}
 }

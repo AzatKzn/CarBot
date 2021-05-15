@@ -20,7 +20,6 @@ namespace CarBot
     /// </summary>
     class UserActions
     {
-
         public static void ShowUserCar(OnMessageReceivedArgs e, Bot bot)
         {
             using (var context = new AppDbContext())
@@ -167,7 +166,7 @@ namespace CarBot
             {
                 if (currentLVL == 99)
                     return false;
-                if (currentLVL < 9)
+                if (currentLVL <= 9)
                     remove = Config.LVLCost[currentLVL];
                 else if (currentLVL > 9)
                     remove = Config.LVLCost[10];
@@ -252,10 +251,14 @@ namespace CarBot
 
             if (user != null)
             {
-                var info = "@{0}, Гонок - {1}({2}) Внимательность - {3}, Скорость реакции {4}, " +
+                //var info = "@{0}, Гонок - {1}({2}) Внимательность - {3}, Скорость реакции {4}, " +
+                //                "Смелость - {5}, Хитрость - {6}, Удача - {7}, Опыт - {8}, Деньги - {9}";
+                //info = string.Format(info, user.Login, user.RaceCount, user.Victories, user.Attentiveness, user.SpeedReaction,
+                //                     user.Сourage, user.Сunning, user.Luck, user.Experience, user.Money);
+                var info = "@{0}, Гонок c ИИ - {1}({2}), Тест драйвов - {10}, Внимательность - {3}, Скорость реакции {4}, " +
                                 "Смелость - {5}, Хитрость - {6}, Удача - {7}, Опыт - {8}, Деньги - {9}";
-                info = string.Format(info, user.Login, user.RaceCount, user.Victories, user.Attentiveness, user.SpeedReaction,
-                                     user.Сourage, user.Сunning, user.Luck, user.Experience, user.Money);
+                info = string.Format(info, user.Login, user.RaceCountWithAI, user.VictoriesWithAI, user.Attentiveness, user.SpeedReaction,
+                                     user.Сourage, user.Сunning, user.Luck, user.Experience, user.Money, user.TestDrivesCount);
                 bot.SendMessage(e.ChatMessage.Channel, info);
             }
         }

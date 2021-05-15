@@ -22,12 +22,13 @@ namespace CarBot.Races
 					string message;
 					if (CanSoloRace(history, ref timeLeft))
 					{
-						Thread.Sleep(3000);
+						Thread.Sleep(2000);
 						int exp, money;
 						CountResult(out exp, out money, user);
 						user.Experience += exp;
 						user.Money += money;
 						user.Login = e.ChatMessage.Username;
+						user.TestDrivesCount++;
 						dbContext.Histories.CreateAndAddHistory(user, ActionType.TestDrive);
 						dbContext.SaveChanges();
 						message = string.Format("@{0}, за тест драйв получено {1} опыта и {2} денег", e.ChatMessage.Username, exp, money);
