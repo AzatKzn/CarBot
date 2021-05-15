@@ -12,8 +12,8 @@ namespace CarBot
 			var path = Path.Combine(Directory.GetCurrentDirectory(), "log.txt");
 			using (var stream = new StreamWriter(path, true))
 			{
-				stream.WriteLine("{0}:  {1}", DateTime.Now, ex.Message);
-				stream.WriteLine("{0}:  {1}", DateTime.Now, ex.StackTrace);
+				stream.WriteLine("{0} Error:  {1}", DateTime.Now, ex.Message);
+				stream.WriteLine("{0} Error:  {1}", DateTime.Now, ex.StackTrace);
 			}
 		}
 
@@ -22,7 +22,7 @@ namespace CarBot
 			var path = Path.Combine(Directory.GetCurrentDirectory(), "log.txt");
 			using (var stream = new StreamWriter(path, true))
 			{
-				stream.WriteLine("{0}:  {1}", DateTime.Now, message);
+				stream.WriteLine("{0} Info:  {1}", DateTime.Now, message);
 			}
 		}
 	}

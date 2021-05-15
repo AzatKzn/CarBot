@@ -31,8 +31,9 @@ namespace CarBot
                 if (userCar == null)
                     return;
                 var auto = userCar.Auto;
+                var uc = context.Cars.ToList();
                 var message = string.Format("@{0}, твоя тачка: {1}, скорость - {2}, маневренность - {3}," +
-                                            " разгон - {4}, торможение - {5}, прочность - {6}.", user.Login,
+                                            " разгон - {4}, торможение - {5}, прочность - {6}%.", user.Login,
                                             auto.Name, auto.Speed, auto.Mobility, auto.Overclocking, auto.Braking, userCar.Strength.ToString("0.0"));
                 bot.SendMessage(e.ChatMessage.Channel, message);
             }
@@ -52,32 +53,34 @@ namespace CarBot
                 UpgradeResult result; 
                 if (user != null && IsCorrectCommand(e.ChatMessage.Message.ToLower(), out propety))
                 {
-                    result = TryUpgrade(user, propety);
+                    string propertyRu;
+                    result = TryUpgrade(user, propety, out propertyRu);
                     context.SaveChanges();
                     if (result.IsSuccess)
                     {
-                        message = string.Format("@{0}, ваша характеристика \"{1}\" увеличина до {2}.",
-                                                e.ChatMessage.Username, propety, result.NewLVL);
+                        message = string.Format("@{0}, ваша характеристика \"{1}\" увеличена до {2}.",
+                                                e.ChatMessage.Username, propertyRu, result.NewLVL);
                     }
                     else if (!result.IsSuccess && result.NeedExp != 0)
                     {
                         message = string.Format("@{0}, для повышения характеристики \"{1}\" не хватает {2} опыта.",
-                                                e.ChatMessage.Username, propety, result.NeedExp);
+                                                e.ChatMessage.Username, propertyRu, result.NeedExp);
                     }
                     else if (!result.IsSuccess && result.NewLVL == -1)
                         message = string.Format("@{0}, ваша характеристика \"{1}\" максимального уровня.", 
-                                                e.ChatMessage.Username, propety);
+                                                e.ChatMessage.Username, propertyRu);
                     bot.SendMessage(e.ChatMessage.Channel, message);
                 }
                 
             }
         }
 
-        static UpgradeResult TryUpgrade(User user, string upgradePropety)
+        static UpgradeResult TryUpgrade(User user, string upgradePropety, out string propertyRu)
         {
             int remove = 0;
             bool isCanUpdate = false;
             int newLVL = 0;
+            propertyRu = string.Empty;
             switch (upgradePropety)
             {
                 case "perception":
@@ -88,6 +91,7 @@ namespace CarBot
                             user.Experience -= remove;
                             user.Attentiveness++;
                             newLVL = user.Attentiveness;
+                            propertyRu = "внимательность";
                         }
                         break;
                     }
@@ -99,6 +103,7 @@ namespace CarBot
                             user.Experience -= remove;
                             user.SpeedReaction++;
                             newLVL = user.SpeedReaction;
+                            propertyRu = "скорость реакции";
                         }
                         break;
                     }
@@ -110,6 +115,7 @@ namespace CarBot
                             user.Experience -= remove;
                             user.Сunning++;
                             newLVL = user.Сunning;
+                            propertyRu = "хитрость";
                         }
                         break;
                     }
@@ -121,6 +127,7 @@ namespace CarBot
                             user.Experience -= remove;
                             user.Сourage++;
                             newLVL = user.Сourage;
+                            propertyRu = "смелость";
                         }
                         break;
                     }
@@ -132,6 +139,7 @@ namespace CarBot
                             user.Experience -= remove;
                             user.Luck++;
                             newLVL = user.Luck;
+                            propertyRu = "удача";
                         }
                         break;
                     }

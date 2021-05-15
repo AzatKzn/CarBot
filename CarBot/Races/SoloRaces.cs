@@ -46,6 +46,16 @@ namespace CarBot.Races
 			double react = (100 + user.SpeedReaction * random.Next(0, 4)) / (double)100;
 			double courage = (100 + user.Сourage * random.Next(-3, 10)) / (double)100;
 			double cunning = (100 + user.Сunning * random.Next(1, 4)) / (double)100;
+			if (atten > 1.4)
+				atten = 1.4;
+			if (react > 1.4)
+				react = 1.4;
+			if (courage > 1.4)
+				courage = 1.4;
+			if (courage < 0)
+				cunning = 0.65;
+			if (cunning > 1.4)
+				cunning = 1.4;
 			double min = (atten * react * courage * cunning);
 			double expD = random.Next(222, 400) * min * Math.Pow(random.Next(139, 160) / (double)100, user.Luck - 1); // rand(222,400) * (rand(139, 160)/100) ^^ (luck - 1) 
 			exp = (int)expD;

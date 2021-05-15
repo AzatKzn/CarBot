@@ -38,7 +38,7 @@ namespace CarBot.Races
 				TimeSpan timeLeft = new TimeSpan();				
 				if (!CanRaceWithAI(history, ref timeLeft))
 				{
-					var left = string.Format("@{0}, следующий гонка с ИИ будет доступен через {1}.", e.ChatMessage.Username, timeLeft.ToString("mm\\:ss"));
+					var left = string.Format("@{0}, следующая гонка с ИИ будет доступна через {1}.", e.ChatMessage.Username, timeLeft.ToString("mm\\:ss"));
 					bot.SendMessage(e.ChatMessage.Channel, left);
 					return;
 				}
@@ -100,42 +100,44 @@ namespace CarBot.Races
 			Random random = new Random();
 			int k = 0;
 			if (speed < 300)
-				k = random.Next(81, 101 + luck * 1); // 5%
+				k = random.Next(79, 101 + luck * 1); // 5%
 			else if (speed < 600)
-				k = random.Next(91, 101 + luck * 1); // 10%
+				k = random.Next(89, 101 + luck * 1); // 10%
 			else if (speed < 900)
-				k = random.Next(83, 103 + luck * 1); // 15% 
+				k = random.Next(81, 103 + luck * 1); // 15% 
 			else if (speed < 1200)
-				k = random.Next(91, 103 + luck * 1); // 25% 
+				k = random.Next(89, 103 + luck * 1); // 25% 
 			else if (speed < 1600)
-				k = random.Next(86, 107 + luck * 1); // 35% 
+				k = random.Next(84, 107 + luck * 1); // 35% 
 			else if (speed < 2000)
-				k = random.Next(86, 111 + luck * 1); // 45% 
+				k = random.Next(84, 111 + luck * 1); // 45% 
 			else if (speed < 2500)
-				k = random.Next(92, 110 + luck * 1); // 55%  
+				k = random.Next(90, 110 + luck * 1); // 55%  
 			else if (speed < 3000)
-				k = random.Next(93, 113 + luck * 1); // 65% 
+				k = random.Next(91, 113 + luck * 1); // 65% 
 			else if (speed < 3500)
-				k = random.Next(94, 114 + luck * 1); // 70% 
+				k = random.Next(92, 114 + luck * 1); // 70% 
 			else if (speed < 4300)
-				k = random.Next(94, 118 + luck * 1); // 75% 
+				k = random.Next(92, 118 + luck * 1); // 75% 
 			else if (speed < 4800)
-				k = random.Next(94, 134 + luck * 4); // 85%  
+				k = random.Next(92, 134 + luck * 4); // 85%  
 			else if (speed < 5200)
-				k = random.Next(93, 182 + luck * 15); // 92% 
+				k = random.Next(91, 182 + luck * 15); // 92% 
 			else if (speed > 5200)
-				k = random.Next(93, 330 + luck * 45); // 97% 
+				k = random.Next(91, 330 + luck * 45); // 97% 
 
 			if (k >= 100)
 			{
 				reward = random.Next(5000 + luck * 20, 7000 + luck * 10);
 				return true;
 			}
-			if (speed > 1200)
+			if (speed >= 1500)
 				reward = random.Next(750 + luck * 15, 900 + luck * 8);
-			else if (speed > 700)
+			else if (speed >= 1000)
 				reward = random.Next(550 + luck * 15, 700 + luck * 8);
-			else if (speed < 400)
+			else if (speed >= 600)
+				reward = random.Next(350 + luck * 15, 500 + luck * 8);
+			else 
 				reward = random.Next(150 + luck * 10, 350 + luck * 5);
 			return false;
 		}
@@ -145,23 +147,23 @@ namespace CarBot.Races
 			Random random = new Random();
 			int k = 0;
 			if (speed < 300)
-				k = random.Next(94, 103 + luck * 1); // 30%
+				k = random.Next(93, 103 + luck * 1); // 30%
 			else if (speed < 650)
-				k = random.Next(94, 104 + luck * 1); // 40%
+				k = random.Next(93, 104 + luck * 1); // 40%
 			else if (speed < 1100)
-				k = random.Next(94, 106 + luck * 1); // 50% 
+				k = random.Next(93, 106 + luck * 1); // 50% 
 			else if (speed < 1500)
-				k = random.Next(94, 109 + luck * 1); // 60%  
+				k = random.Next(93, 109 + luck * 1); // 60%  
 			else if (speed < 1900)
-				k = random.Next(94, 114 + luck * 1); // 70% 
+				k = random.Next(93, 114 + luck * 1); // 70% 
 			else if (speed < 2400)
-				k = random.Next(94, 124 + luck * 3); // 80%  
+				k = random.Next(93, 124 + luck * 3); // 80%  
 			else if (speed < 2900)
-				k = random.Next(94, 134 + luck * 4); // 85% 
+				k = random.Next(93, 134 + luck * 4); // 85% 
 			else if (speed < 3500)
-				k = random.Next(93, 182 + luck * 15); // 92% 
+				k = random.Next(92, 182 + luck * 15); // 92% 
 			else if (speed > 3500)
-				k = random.Next(93, 330 + luck * 45); // 97% 
+				k = random.Next(92, 330 + luck * 45); // 97% 
 
 			if (k >= 100)
 			{
@@ -170,7 +172,7 @@ namespace CarBot.Races
 			}
 
 			reward = random.Next(400 + luck * 13, 600 + luck * 6);
-			if (speed < 300)
+			if (speed <= 600)
 				reward = random.Next(150 + luck * 10, 350 + luck * 5);
 			return false;
 		}

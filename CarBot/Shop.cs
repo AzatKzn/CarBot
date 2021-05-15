@@ -92,7 +92,7 @@ namespace CarBot
 				var auto = context.Autos.FirstOrDefault(a => a.Id == id && a.IsShow);
 				if (auto == null)
 					return;
-				if (!CanBuyAuto(user, auto, message))
+				if (!CanBuyAuto(user, auto, ref message))
 				{
 					bot.SendMessage(e.ChatMessage.Channel, message);
 					return;
@@ -123,7 +123,7 @@ namespace CarBot
 			};
 		}
 
-		static bool CanBuyAuto(User user, Auto auto, string message)
+		static bool CanBuyAuto(User user, Auto auto, ref string message)
 		{
 			var isEnough = false;
 			var prop = "";
@@ -150,7 +150,7 @@ namespace CarBot
 				return true;
 			
 			if (!isEnough)
-				message = string.Format("@{0}, для покупки нужна характеристика {1} должна быть равной {2}.", user.Login, prop, auto.PropertyValue);
+				message = string.Format("@{0}, для покупки {3} характеристика {1} должна быть равной {2}.", user.Login, prop, auto.PropertyValue, auto.Name);
 			else
 				message = string.Format("@{0}, недостаточно денег для покупки.", user.Login);
 

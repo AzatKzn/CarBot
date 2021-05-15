@@ -22,7 +22,7 @@ namespace CarBot.DBContexts
 
 		public UserCar GetUserCar(string userId)
 		{
-			return Cars.Where(x => x.User.Id.Equals(userId) && x.IsActive == true).OrderByDescending(x => x.BuyDate).FirstOrDefault();
+			return Cars.Where(x => x.User.Id.Equals(userId) && x.IsActive == true).Include(x => x.Auto).OrderByDescending(x => x.BuyDate).FirstOrDefault();
 		}
 
 		public User GetUser(string userId)

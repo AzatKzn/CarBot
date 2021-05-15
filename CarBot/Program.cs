@@ -27,13 +27,13 @@ namespace CarBot
 				}
 				Module.Initialize();
 				Bot bot = new Bot();
-				Minutes = 0;
+				Minutes = Configuration.ShopShowMinutes;
 				while (true)
 				{
+					if (Minutes >= Configuration.ShopShowMinutes)
+						ShopAction.ChangeCars(Configuration.Channel, bot);
 					Minutes += 5;
 					Thread.Sleep(TimeSpan.FromMinutes(5));
-					if (Minutes >= Configuration.ShopShowMinutes)						
-						ShopAction.ChangeCars(Configuration.Channel, bot);
 					
 				}
 			}
