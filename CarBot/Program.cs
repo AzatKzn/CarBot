@@ -17,8 +17,8 @@ namespace CarBot
 		{
 			try
 			{
-				Configuration.LoadConfig();
-				if (Configuration.IsNeedUpdateDatabase)
+				Config.LoadConfig();
+				if (Config.IsNeedUpdateDatabase)
 				{
 					using (var context = new AppDbContext())
 					{
@@ -27,11 +27,11 @@ namespace CarBot
 				}
 				Module.Initialize();
 				Bot bot = new Bot();
-				Minutes = Configuration.ShopShowMinutes;
+				Minutes = Config.ShopShowMinutes;
 				while (true)
 				{
-					if (Minutes >= Configuration.ShopShowMinutes)
-						ShopAction.ChangeCars(Configuration.Channel, bot);
+					if (Minutes >= Config.ShopShowMinutes && bot.IsOn)
+						ShopAction.ChangeCars(Config.Channel, bot);
 					Minutes += 5;
 					Thread.Sleep(TimeSpan.FromMinutes(5));
 					

@@ -1,4 +1,5 @@
 ﻿using CarBot.DBContexts;
+using CarBot.DbSetExtensions;
 using CarBot.Models;
 using System;
 using System.Linq;
@@ -24,10 +25,10 @@ namespace CarBot
         {
             using (var context = new AppDbContext())
             {
-                var user = context.GetUser(e.ChatMessage.UserId);
+                var user = context.Users.GetUser(e.ChatMessage.UserId);
                 if (user == null)
                     return;
-                var userCar = context.GetUserCar(user.Id);
+                var userCar = context.Cars.GetUserCar(user);
                 if (userCar == null)
                     return;
                 var auto = userCar.Auto;
@@ -47,7 +48,7 @@ namespace CarBot
         {            
             using (var context = new AppDbContext())
             {
-                var user = context.GetUser(e.ChatMessage.UserId);
+                var user = context.Users.GetUser(e.ChatMessage.UserId);
                 string propety;
                 var message = "";
                 UpgradeResult result; 
@@ -167,9 +168,9 @@ namespace CarBot
                 if (currentLVL == 99)
                     return false;
                 if (currentLVL < 9)
-                    remove = Configuration.LVLCost[currentLVL];
+                    remove = Config.LVLCost[currentLVL];
                 else if (currentLVL > 9)
-                    remove = Configuration.LVLCost[10];
+                    remove = Config.LVLCost[10];
             }
             else 
             {
@@ -204,14 +205,14 @@ namespace CarBot
         /// </summary>
         public static void CreateUser(OnMessageReceivedArgs e, Bot bot)
         {
-            using (var userContext = new AppDbContext())
+            using (var context = new AppDbContext())
             {
-                bool isCreated = userContext.GetUser(e.ChatMessage.UserId) == null ? false : true;
+                bool isCreated = context.Users.GetUser(e.ChatMessage.UserId) == null ? false : true;
                 if (!isCreated)
                 {
                     var user = GetNewUser(e.ChatMessage.UserId, e.ChatMessage.Username);
-                    userContext.Users.Add(user);
-                    userContext.SaveChanges();
+                    context.Users.Add(user);
+                    context.SaveChanges();
 
                     var message = "@{0}, Теперь повышай свои характеристики и копи деньги, участвуя в тест драйвах";
                     bot.SendMessage(e.ChatMessage.Channel, string.Format(message, e.ChatMessage.Username));
@@ -230,8 +231,6 @@ namespace CarBot
                 Login = login,
                 Money = 100,
                 Experience = 100,
-                RaceCount = 0,
-                Victories = 0,
                 Attentiveness = 1,
                 SpeedReaction = 1,
                 Сunning = 1,

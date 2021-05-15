@@ -62,7 +62,7 @@ namespace CarBot
 
 		static string ReadFile()
 		{
-			var path = Configuration.ShopPath;
+			var path = Config.ShopPath;
 			var text = "";
 			using (var stream = new StreamReader(path))
 			{

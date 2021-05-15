@@ -1,7 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using CarBot.Models;
+﻿using CarBot.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 
 namespace CarBot.DBContexts
 {
@@ -15,27 +14,14 @@ namespace CarBot.DBContexts
 
 		public DbSet<Auto> Autos { get; set; }
 
-		public History GetLastHistory(User user, ActionType actionType)
-		{
-			return Histories.Where(x => x.User.Id == user.Id && x.ActionType == actionType).OrderByDescending(x => x.Date).FirstOrDefault();
-		}
-
-		public UserCar GetUserCar(string userId)
-		{
-			return Cars.Where(x => x.User.Id.Equals(userId) && x.IsActive == true).Include(x => x.Auto).OrderByDescending(x => x.BuyDate).FirstOrDefault();
-		}
-
-		public User GetUser(string userId)
-		{
-			return Users.Where(x => x.Id == userId).FirstOrDefault();
-		}
+		public DbSet<GroupRace> GroupRaces { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{
-			Configuration.LoadConfig();
-
+			Config.LoadConfig();
+			
 			optionsBuilder.UseMySql(
-				Configuration.ConnectionString, 
+				Config.ConnectionString, 
 				new MySqlServerVersion(new Version(5, 7, 21)));
 		}
 	}

@@ -1,10 +1,7 @@
 ﻿using CarBot.DBContexts;
+using CarBot.DbSetExtensions;
 using CarBot.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TwitchLib.Client.Events;
 
 namespace CarBot.Races
@@ -23,10 +20,10 @@ namespace CarBot.Races
 		{
 			using (var context = new AppDbContext())
 			{
-				var user = context.GetUser(e.ChatMessage.UserId);
+				var user = context.Users.GetUser(e.ChatMessage.UserId);
 				if (user == null)
 					return;
-				var userCar = context.GetUserCar(user.Id);
+				var userCar = context.Cars.GetUserCar(user);
 				if (userCar == null)
 				{
 					var noAuto = string.Format("@{0}, без автомобиля нельзя выезжать на гонку", e.ChatMessage.Username);
@@ -34,7 +31,7 @@ namespace CarBot.Races
 					return;
 				}
 
-				var history = context.GetLastHistory(user, ActionType.RaceWithAI);
+				var history = context.Histories.GetLastUserHistory(user, ActionType.RaceWithAI);
 				TimeSpan timeLeft = new TimeSpan();				
 				if (!CanRaceWithAI(history, ref timeLeft))
 				{
@@ -49,7 +46,7 @@ namespace CarBot.Races
 				var speed = GetSpeed(user, userCar);
 				user.Login = e.ChatMessage.Username;
 				var message = GetResult(speed, complexity, user);
-				context.Histories.Add(GetHistory(user, ActionType.RaceWithAI, userCar));
+				context.Histories.CreateAndAddHistory(user, ActionType.RaceWithAI, userCar);
 
 				if (userCar.Strength > 0)
 					userCar.Strength -= 0.5f;
@@ -235,15 +232,10 @@ namespace CarBot.Races
 			if (history == null)
 				return true;
 			time = DateTime.Now - history.Date;
-			if (time.TotalMinutes >= Configuration.RaceWithAITimeOutMinutes)
+			if (time.TotalMinutes >= Config.RaceWithAITimeOutMinutes)
 				return true;
-			time = TimeSpan.FromMinutes(Configuration.RaceWithAITimeOutMinutes) - time;
+			time = TimeSpan.FromMinutes(Config.RaceWithAITimeOutMinutes) - time;
 			return false;
-		}
-
-		static History GetHistory(User user, ActionType actionType, UserCar car)
-		{
-			return new History() { User = user, ActionType = actionType, Date = DateTime.Now, Car = car };
 		}
 		#endregion
 	}

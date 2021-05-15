@@ -5,7 +5,7 @@ using System.IO;
 
 namespace CarBot
 {
-	static class Configuration
+	static class Config
 	{
         public static string ConnectionString { get; private set; }
         public static bool IsNeedUpdateDatabase { get; private set; }

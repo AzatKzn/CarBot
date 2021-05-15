@@ -12,9 +12,10 @@ namespace CarBot
 	class Bot
     {
         TwitchClient client;
-        readonly string BotName = Configuration.BotName;
-        readonly string OAuth = Configuration.OAuth;
-        readonly string ChannelName = Configuration.Channel;
+        readonly string BotName = Config.BotName;
+        readonly string OAuth = Config.OAuth;
+        readonly string ChannelName = Config.Channel;
+        public bool IsOn => isOn;
         bool isOn = true;
 
         public Bot()
@@ -89,6 +90,10 @@ namespace CarBot
                                 else if (message.StartsWith("!buy"))
                                 {
                                     ShopAction.BuyAuto(e, this);
+                                }
+                                else if (message.StartsWith("!top"))
+                                {
+                                    Tops.ShowTop(e, this);
                                 }
 
                                 AdminCommands(e);

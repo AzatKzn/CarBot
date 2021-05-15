@@ -5,6 +5,7 @@ using System.Linq;
 using CarBot.Models;
 using System.Text;
 using System.Collections.Generic;
+using CarBot.DbSetExtensions;
 
 namespace CarBot
 {
@@ -86,7 +87,7 @@ namespace CarBot
 			
 			using (var context = new AppDbContext())
 			{
-				var user = context.GetUser(e.ChatMessage.UserId);
+				var user = context.Users.GetUser(e.ChatMessage.UserId);
 				if (user == null)
 					return;
 				var auto = context.Autos.FirstOrDefault(a => a.Id == id && a.IsShow);
