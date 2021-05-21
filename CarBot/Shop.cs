@@ -6,6 +6,7 @@ using CarBot.Models;
 using System.Text;
 using System.Collections.Generic;
 using CarBot.DbSetExtensions;
+using CarBot.BaseTypesExtensions;
 
 namespace CarBot
 {
@@ -69,7 +70,7 @@ namespace CarBot
 				foreach (var car in cars)
 				{
 					var str = "{0}. {1} (Id={3}) - {2}. ";
-					message.Append(string.Format(str, i, car.Name, car.Cost, car.Id));
+					message.Append(str.Format(i, car.Name, car.Cost, car.Id));
 					i++;
 				}
 				var response = message.ToString().Trim();
@@ -104,7 +105,7 @@ namespace CarBot
 				if (lastCar != null) lastCar.IsActive = false;
 				context.Cars.Add(newCar);
 				context.SaveChanges();
-				message = string.Format("@{0}, поздравляем с покупкой нового авто", e.ChatMessage.Username);
+				message = "@{0}, поздравляем с покупкой нового авто".Format(e.ChatMessage.Username);
 			}
 
 			if (!string.IsNullOrEmpty(message))
@@ -151,9 +152,9 @@ namespace CarBot
 				return true;
 			
 			if (!isEnough)
-				message = string.Format("@{0}, для покупки {3} характеристика {1} должна быть равной {2}.", user.Login, prop, auto.PropertyValue, auto.Name);
+				message = "@{0}, для покупки {3} характеристика {1} должна быть равной {2}.".Format(user.Login, prop, auto.PropertyValue, auto.Name);
 			else
-				message = string.Format("@{0}, недостаточно денег для покупки.", user.Login);
+				message = "@{0}, недостаточно денег для покупки.".Format(user.Login);
 
 			return false;
 		}

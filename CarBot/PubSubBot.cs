@@ -7,6 +7,7 @@ using TwitchLib.Communication.Models;
 using TwitchLib.PubSub;
 using TwitchLib.PubSub.Events;
 using CarBot.DbSetExtensions;
+using CarBot.BaseTypesExtensions;
 
 namespace CarBot
 {
@@ -18,6 +19,7 @@ namespace CarBot
 		{
 			client = new TwitchPubSub();
 			client.OnPubSubServiceConnected += onPubSubServiceConnected;
+			client.OnPubSubServiceClosed += onPubSubServiceDisConnected;
 			client.OnRewardRedeemed += OnRewardRedeemed;
 			client.ListenToRewards("142647519");
 			client.Connect();
@@ -34,20 +36,19 @@ namespace CarBot
 			{
 				try
 				{
-					if (e.RewardTitle.Contains("10к опыта в игре") || e.RewardId.ToString() == "b2a275fe-b37e-4d69-bde4-9d59f0c39b7e")
+					if (e.RewardTitle.Contains("10к опыта в игре") || e.RewardId.ToString().ToLower() == "b2a275fe-b37e-4d69-bde4-9d59f0c39b7e")
 						Upgrade(e, true, 10000);
-					else if (e.RewardTitle.Contains("30к опыта в игре") || e.RewardId.ToString() == "36827cd8-001d-4735-9b1e-7dbaf9604b2f")
+					else if (e.RewardTitle.Contains("30к опыта в игре") || e.RewardId.ToString().ToLower() == "36827cd8-001d-4735-9b1e-7dbaf9604b2f")
 						Upgrade(e, true, 30000);
-					else if (e.RewardTitle.Contains("65к опыта в игре") || e.RewardId.ToString() == "8fd25e79-1f1d-4d01-9096-df0e372e9cc1")
+					else if (e.RewardTitle.Contains("70к опыта в игре") || e.RewardId.ToString().ToLower() == "8fd25e79-1f1d-4d01-9096-df0e372e9cc1")
 						Upgrade(e, true, 70000);
-					else if (e.RewardTitle.Contains("10к денег в игре") || e.RewardId.ToString() == "30db925c-97dc-4a8b-b9ab-570888095aef")
+					else if (e.RewardTitle.Contains("10к денег в игре") || e.RewardId.ToString().ToLower() == "30db925c-97dc-4a8b-b9ab-570888095aef")
 						Upgrade(e, false, 10000);
-					else if (e.RewardTitle.Contains("30к денег в игре") || e.RewardId.ToString() == "918d3bb0-7dc1-4e20-92d2-f5ee9a2c1c3e")
+					else if (e.RewardTitle.Contains("30к денег в игре") || e.RewardId.ToString().ToLower() == "918d3bb0-7dc1-4e20-92d2-f5ee9a2c1c3e")
 						Upgrade(e, false, 30000);
-					else if (e.RewardTitle.Contains("65к денег в игре") || e.RewardId.ToString() == "fe8df898-1f48-474c-bce4-334c707f9e72")
+					else if (e.RewardTitle.Contains("70к денег в игре") || e.RewardId.ToString().ToLower() == "fe8df898-1f48-474c-bce4-334c707f9e72")
 						Upgrade(e, false, 70000);
-
-					if (e.RewardCost >= 10000)
+					else if(e.RewardCost >= 10000)
 						LogInfo(e);
 				}
 				catch (Exception ex)
@@ -60,7 +61,7 @@ namespace CarBot
 
 		private void LogInfo(OnRewardRedeemedArgs e)
 		{
-			var str = string.Format(CantParseMessage, e.RewardTitle, e.RewardId, e.RewardCost, e.Login, e.DisplayName);
+			var str = CantParseMessage.Format(e.RewardTitle, e.RewardId, e.RewardCost, e.Login, e.DisplayName);
 			Logger.LogRewardInfo(str);
 		}
 
@@ -91,9 +92,25 @@ namespace CarBot
 			}
 		}
 
+		private void onPubSubServiceDisConnected(object sender, EventArgs e)
+		{
+			try
+			{
+				Logger.LogRewardInfo("Disconnected.");
+				Logger.LogRewardInfo("Try to reconnect...");
+				client.Connect();
+				Logger.LogRewardInfo("Reconnected...");
+			}
+			catch (Exception ex)
+			{
+				Logger.LogRewardError(ex);
+			}
+		}
+
 		private void onPubSubServiceConnected(object sender, EventArgs e)
 		{
 			client.SendTopics("tj1yzfx8dkta7nsvft33fmf07fje7o");
+			Logger.LogRewardInfo("Connected to channel");
 		}
 	}
 }

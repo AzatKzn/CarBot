@@ -4,6 +4,7 @@ using CarBot.Models;
 using System;
 using System.Linq;
 using TwitchLib.Client.Events;
+using CarBot.BaseTypesExtensions;
 
 namespace CarBot
 {
@@ -31,8 +32,7 @@ namespace CarBot
                 if (userCar == null)
                     return;
                 var auto = userCar.Auto;
-                var message = string.Format("@{0}, твоя тачка: {1}, скорость - {2}, маневренность - {3}," +
-                                            " разгон - {4}, торможение - {5}, прочность - {6}%.", user.Login,
+                var message = "@{0}, твоя тачка: {1}, скорость - {2}, маневренность - {3}, разгон - {4}, торможение - {5}, прочность - {6}%.".Format(user.Login,
                                             auto.Name, auto.Speed, auto.Mobility, auto.Overclocking, auto.Braking, userCar.Strength.ToString("0.0"));
                 bot.SendMessage(e.ChatMessage.Channel, message);
             }
@@ -57,17 +57,14 @@ namespace CarBot
                     context.SaveChanges();
                     if (result.IsSuccess)
                     {
-                        message = string.Format("@{0}, ваша характеристика \"{1}\" увеличена до {2}.",
-                                                e.ChatMessage.Username, propertyRu, result.NewLVL);
+                        message = "@{0}, ваша характеристика \"{1}\" увеличена до {2}.".Format(e.ChatMessage.Username, propertyRu, result.NewLVL);
                     }
                     else if (!result.IsSuccess && result.NeedExp != 0)
                     {
-                        message = string.Format("@{0}, для повышения характеристики \"{1}\" не хватает {2} опыта.",
-                                                e.ChatMessage.Username, propertyRu, result.NeedExp);
+                        message = "@{0}, для повышения характеристики \"{1}\" не хватает {2} опыта.".Format(e.ChatMessage.Username, propertyRu, result.NeedExp);
                     }
                     else if (!result.IsSuccess && result.NewLVL == -1)
-                        message = string.Format("@{0}, ваша характеристика \"{1}\" максимального уровня.", 
-                                                e.ChatMessage.Username, propertyRu);
+                        message = "@{0}, ваша характеристика \"{1}\" максимального уровня.".Format(e.ChatMessage.Username, propertyRu);
                     bot.SendMessage(e.ChatMessage.Channel, message);
                 }
                 
@@ -213,7 +210,7 @@ namespace CarBot
                     context.SaveChanges();
 
                     var message = "@{0}, Теперь повышай свои характеристики и копи деньги, участвуя в тест драйвах";
-                    bot.SendMessage(e.ChatMessage.Channel, string.Format(message, e.ChatMessage.Username));
+                    bot.SendMessage(e.ChatMessage.Channel, message.Format(e.ChatMessage.Username));
                 }
             }
         }
@@ -250,13 +247,9 @@ namespace CarBot
 
             if (user != null)
             {
-                //var info = "@{0}, Гонок - {1}({2}) Внимательность - {3}, Скорость реакции {4}, " +
-                //                "Смелость - {5}, Хитрость - {6}, Удача - {7}, Опыт - {8}, Деньги - {9}";
-                //info = string.Format(info, user.Login, user.RaceCount, user.Victories, user.Attentiveness, user.SpeedReaction,
-                //                     user.Сourage, user.Сunning, user.Luck, user.Experience, user.Money);
                 var info = "@{0}, Гонок c ИИ - {1}({2}), Тест драйвов - {10}, Внимательность - {3}, Скорость реакции {4}, " +
                                 "Смелость - {5}, Хитрость - {6}, Удача - {7}, Опыт - {8}, Деньги - {9}";
-                info = string.Format(info, user.Login, user.RaceCountWithAI, user.VictoriesWithAI, user.Attentiveness, user.SpeedReaction,
+                info = info.Format(user.Login, user.RaceCountWithAI, user.VictoriesWithAI, user.Attentiveness, user.SpeedReaction,
                                      user.Сourage, user.Сunning, user.Luck, user.Experience, user.Money, user.TestDrivesCount);
                 bot.SendMessage(e.ChatMessage.Channel, info);
             }

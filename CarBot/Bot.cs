@@ -6,6 +6,8 @@ using TwitchLib.Client.Models;
 using TwitchLib.Communication.Clients;
 using TwitchLib.Communication.Models;
 using CarBot.Races;
+using TwitchLib.Communication.Events;
+using CarBot.BaseTypesExtensions;
 
 namespace CarBot
 {
@@ -30,9 +32,26 @@ namespace CarBot
             client = new TwitchClient(customClient);
             client.Initialize(credentials, ChannelName);
             client.OnConnected += Client_OnConnected;
+            client.OnDisconnected += Client_OnDisconnected;
             client.OnMessageReceived += Client_OnMessageReceived;
             client.Connect();
         }
+
+        private void Client_OnDisconnected(object sender, OnDisconnectedEventArgs e)
+        {
+            try
+            {
+                Logger.LogInfo("Disconnected.");
+                Logger.LogInfo("Try to reconnect...");
+                client.Connect();
+                Logger.LogInfo("Reconnected...");
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(ex);
+			}
+
+		}
 
         private void Client_OnConnected(object sender, OnConnectedArgs e)
         {
@@ -143,7 +162,7 @@ namespace CarBot
 
         public void SendWhisper(string channel, string user, string message)
         {
-            var str = string.Format("/w {0} {1}", user, message);
+            var str = "/w {0} {1}".Format(user, message);
             client.SendMessage(channel, str);
 		}
 

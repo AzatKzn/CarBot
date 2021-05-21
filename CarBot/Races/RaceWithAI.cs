@@ -4,6 +4,7 @@ using CarBot.Models;
 using System;
 using System.Threading;
 using TwitchLib.Client.Events;
+using CarBot.BaseTypesExtensions;
 
 namespace CarBot.Races
 {
@@ -27,7 +28,7 @@ namespace CarBot.Races
 				var userCar = context.Cars.GetUserCar(user);
 				if (userCar == null)
 				{
-					var noAuto = string.Format("@{0}, без автомобиля нельзя выезжать на гонку", e.ChatMessage.Username);
+					var noAuto = "@{0}, без автомобиля нельзя выезжать на гонку".Format(e.ChatMessage.Username);
 					bot.SendMessage(e.ChatMessage.Channel, noAuto);
 					return;
 				}
@@ -36,7 +37,7 @@ namespace CarBot.Races
 				TimeSpan timeLeft = new TimeSpan();				
 				if (!CanRaceWithAI(history, ref timeLeft))
 				{
-					var left = string.Format("@{0}, следующая гонка с ИИ будет доступна через {1}.", e.ChatMessage.Username, timeLeft.ToString("mm\\:ss"));
+					var left = "@{0}, следующая гонка с ИИ будет доступна через {1}.".Format(e.ChatMessage.Username, timeLeft.ToString("mm\\:ss"));
 					bot.SendMessage(e.ChatMessage.Channel, left);
 					return;
 				}
@@ -79,13 +80,11 @@ namespace CarBot.Races
 			var money = (int)(reward * (new Random().Next(90, 109) / (double)100) / 1.3);
 			if (isWin)
 			{
-				message = string.Format("@{0}, ты выиграл в гонке с компьютером и получил {1} опыта и {2} денег",
-										user.Login, reward, money);
+				message = "@{0}, ты выиграл в гонке с компьютером и получил {1} опыта и {2} денег".Format(user.Login, reward, money);
 				user.VictoriesWithAI++;
 			}
 			else
-				message = string.Format("@{0}, ты проиграл в гонке с компьютером, утешительный приз - {1} опыта и {2} денег",
-										user.Login, reward, money);
+				message = "@{0}, ты проиграл в гонке с компьютером, утешительный приз - {1} опыта и {2} денег".Format(user.Login, reward, money);
 			user.RaceCountWithAI++;
 			user.Experience += reward;
 			user.Money += money;

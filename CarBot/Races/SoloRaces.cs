@@ -4,6 +4,7 @@ using CarBot.Models;
 using System;
 using System.Threading;
 using TwitchLib.Client.Events;
+using CarBot.BaseTypesExtensions;
 
 namespace CarBot.Races
 {
@@ -31,10 +32,10 @@ namespace CarBot.Races
 						user.TestDrivesCount++;
 						dbContext.Histories.CreateAndAddHistory(user, ActionType.TestDrive);
 						dbContext.SaveChanges();
-						message = string.Format("@{0}, за тест драйв получено {1} опыта и {2} денег", e.ChatMessage.Username, exp, money);
+						message = "@{0}, за тест драйв получено {1} опыта и {2} денег".Format(e.ChatMessage.Username, exp, money);
 					}
 					else					
-						message = string.Format("@{0}, следующий тест драйв будет доступен через {1}.", e.ChatMessage.Username, timeLeft.ToString("mm\\:ss"));
+						message = "@{0}, следующий тест драйв будет доступен через {1}.".Format(e.ChatMessage.Username, timeLeft.ToString("mm\\:ss"));
 					bot.SendMessage(e.ChatMessage.Channel,message);
 				}
 			}

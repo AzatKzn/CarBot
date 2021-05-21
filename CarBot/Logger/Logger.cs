@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using CarBot.BaseTypesExtensions;
 
 namespace CarBot
 {
@@ -18,29 +19,29 @@ namespace CarBot
 			//Console.WriteLine(ex.StackTrace);
 			var path = Path.Combine(Directory.GetCurrentDirectory(), "logs", "log.txt");
 			var str = "{0} Error:  {1}";
-			Log(path, string.Format(str, DateTime.Now, ex.Message) + Environment.NewLine +
-					  string.Format(str, DateTime.Now, ex.StackTrace));
+			Log(path, str.Format(DateTime.Now, ex.Message) + Environment.NewLine +
+					  str.Format(DateTime.Now, ex.StackTrace));
 
 		}
 
 		public static void LogInfo(string message)
 		{
 			var path = Path.Combine(Directory.GetCurrentDirectory(), "logs", "log.txt");
-			Log(path, string.Format("{0} Info:  {1}", DateTime.Now, message));
+			Log(path, "{0} Info:  {1}".Format(DateTime.Now, message));
 		}
 
 		public static void LogRewardError(Exception ex)
 		{
 			var path = Path.Combine(Directory.GetCurrentDirectory(), "logs", "rewards.txt");
 			var str = "{0} Error:  {1}";
-			Log(path, string.Format(str, DateTime.Now, ex.Message) + Environment.NewLine +
-					  string.Format(str, DateTime.Now, ex.StackTrace));
+			Log(path, str.Format(DateTime.Now, ex.Message) + Environment.NewLine +
+					  str.Format(DateTime.Now, ex.StackTrace));
 		}
 
 		public static void LogRewardInfo(string message)
 		{
 			var path = Path.Combine(Directory.GetCurrentDirectory(), "logs", "rewards.txt");
-			Log(path, string.Format("{0} Info:  {1}", DateTime.Now, message));
+			Log(path, "{0} Info:  {1}".Format(DateTime.Now, message));
 		}
 	}
 }

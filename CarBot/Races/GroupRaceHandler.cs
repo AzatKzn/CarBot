@@ -7,6 +7,7 @@ using TwitchLib.Client.Events;
 using CarBot.Models;
 using CarBot.DBContexts;
 using CarBot.DbSetExtensions;
+using CarBot.BaseTypesExtensions;
 
 namespace CarBot.Races
 {
@@ -44,8 +45,8 @@ namespace CarBot.Races
 			{
 				var groupRace = context.GroupRaces.Get(CurrentRaceId);
 				if (groupRace == null) return;
-				var message = string.Format("Через {0} минут стартует группой заезд!!! Для участия в гонке !join (необходима тачка), " +
-									"текущее количество участников - {1}.", 5, groupRace.Participants.Count);
+				var message = "Через {0} минут стартует группой заезд!!! Для участия в гонке !join (необходима тачка), " +
+									"текущее количество участников - {1}.".Format(5, groupRace.Participants.Count);
 				bot.SendMessage(channel, message);
 			}
 		}
@@ -64,8 +65,8 @@ namespace CarBot.Races
 				userCars.ForEach(x => x.Strength--);
 				UpdateUsers(userResults);
 				context.SaveChanges();
-				var message = string.Format("Через {0} минут стартует группой заезд!!! Для участия в гонке !join (необходима тачка), " +
-									"текущее количество участников - {1}.", 5, groupRace.Participants.Count);
+				var message = "Через {0} минут стартует группой заезд!!! Для участия в гонке !join (необходима тачка), " +
+									"текущее количество участников - {1}.".Format(5, groupRace.Participants.Count);
 				bot.SendMessage(Config.Channel, message);
 			}
 		}
