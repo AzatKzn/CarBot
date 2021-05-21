@@ -21,7 +21,7 @@ namespace CarBot.Races
 		{
 			using (var context = new AppDbContext())
 			{
-				var user = context.Users.GetUser(e.ChatMessage.UserId);
+				var user = context.Users.Get(e.ChatMessage.UserId);
 				if (user == null)
 					return;
 				var userCar = context.Cars.GetUserCar(user);
@@ -76,7 +76,7 @@ namespace CarBot.Races
 					break;
 			}
 			string message;
-			var money = (int)(reward * (new Random().Next(90, 109) / (double)100));
+			var money = (int)(reward * (new Random().Next(90, 109) / (double)100) / 1.3);
 			if (isWin)
 			{
 				message = string.Format("@{0}, ты выиграл в гонке с компьютером и получил {1} опыта и {2} денег",

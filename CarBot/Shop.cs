@@ -87,7 +87,7 @@ namespace CarBot
 			
 			using (var context = new AppDbContext())
 			{
-				var user = context.Users.GetUser(e.ChatMessage.UserId);
+				var user = context.Users.Get(e.ChatMessage.UserId);
 				if (user == null)
 					return;
 				var auto = context.Autos.FirstOrDefault(a => a.Id == id && a.IsShow);

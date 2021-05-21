@@ -24,14 +24,13 @@ namespace CarBot
         {
             using (var context = new AppDbContext())
             {
-                var user = context.Users.GetUser(e.ChatMessage.UserId);
+                var user = context.Users.Get(e.ChatMessage.UserId);
                 if (user == null)
                     return;
                 var userCar = context.Cars.GetUserCar(user);
                 if (userCar == null)
                     return;
                 var auto = userCar.Auto;
-                var uc = context.Cars.ToList();
                 var message = string.Format("@{0}, твоя тачка: {1}, скорость - {2}, маневренность - {3}," +
                                             " разгон - {4}, торможение - {5}, прочность - {6}%.", user.Login,
                                             auto.Name, auto.Speed, auto.Mobility, auto.Overclocking, auto.Braking, userCar.Strength.ToString("0.0"));
@@ -47,7 +46,7 @@ namespace CarBot
         {            
             using (var context = new AppDbContext())
             {
-                var user = context.Users.GetUser(e.ChatMessage.UserId);
+                var user = context.Users.Get(e.ChatMessage.UserId);
                 string propety;
                 var message = "";
                 UpgradeResult result; 
@@ -90,9 +89,9 @@ namespace CarBot
                         {
                             user.Experience -= remove;
                             user.Attentiveness++;
-                            newLVL = user.Attentiveness;
-                            propertyRu = "внимательность";
+                            newLVL = user.Attentiveness;                            
                         }
+                        propertyRu = "внимательность";
                         break;
                     }
                 case "reaction":
@@ -102,9 +101,9 @@ namespace CarBot
                         {
                             user.Experience -= remove;
                             user.SpeedReaction++;
-                            newLVL = user.SpeedReaction;
-                            propertyRu = "скорость реакции";
+                            newLVL = user.SpeedReaction;                            
                         }
+                        propertyRu = "скорость реакции";
                         break;
                     }
                 case "cunning":
@@ -114,9 +113,9 @@ namespace CarBot
                         {
                             user.Experience -= remove;
                             user.Сunning++;
-                            newLVL = user.Сunning;
-                            propertyRu = "хитрость";
+                            newLVL = user.Сunning;                            
                         }
+                        propertyRu = "хитрость";
                         break;
                     }
                 case "boldness":
@@ -126,9 +125,9 @@ namespace CarBot
                         {
                             user.Experience -= remove;
                             user.Сourage++;
-                            newLVL = user.Сourage;
-                            propertyRu = "смелость";
+                            newLVL = user.Сourage;                            
                         }
+                        propertyRu = "смелость";
                         break;
                     }
                 case "luck":
@@ -138,9 +137,9 @@ namespace CarBot
                         {
                             user.Experience -= remove;
                             user.Luck++;
-                            newLVL = user.Luck;
-                            propertyRu = "удача";
+                            newLVL = user.Luck;                            
                         }
+                        propertyRu = "удача";
                         break;
                     }
             }
@@ -206,7 +205,7 @@ namespace CarBot
         {
             using (var context = new AppDbContext())
             {
-                bool isCreated = context.Users.GetUser(e.ChatMessage.UserId) == null ? false : true;
+                bool isCreated = context.Users.Get(e.ChatMessage.UserId) == null ? false : true;
                 if (!isCreated)
                 {
                     var user = GetNewUser(e.ChatMessage.UserId, e.ChatMessage.Username);

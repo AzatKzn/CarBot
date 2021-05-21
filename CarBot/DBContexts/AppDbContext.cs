@@ -14,7 +14,11 @@ namespace CarBot.DBContexts
 
 		public DbSet<Auto> Autos { get; set; }
 
-		//public DbSet<GroupRace> GroupRaces { get; set; }
+		public DbSet<GroupRaceParticipant> GroupRaceParticipant { get; set; }
+
+		public DbSet<GroupRace> GroupRaces { get; set; }
+
+		public DbSet<RewardHistory> RewardHistories { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{

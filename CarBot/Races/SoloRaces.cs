@@ -14,7 +14,7 @@ namespace CarBot.Races
 		{
 			using (var dbContext = new AppDbContext())
 			{
-				var user = dbContext.Users.GetUser(e.ChatMessage.UserId);
+				var user = dbContext.Users.Get(e.ChatMessage.UserId);
 				if (user != null)
 				{
 					var history = dbContext.Histories.GetLastUserHistory(user, ActionType.TestDrive);

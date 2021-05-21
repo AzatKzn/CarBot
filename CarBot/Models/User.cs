@@ -78,5 +78,10 @@ namespace CarBot.Models
 		/// Количество тест драйвов
 		/// </summary>
 		public int TestDrivesCount { get; set; }
+
+		/// <summary>
+		/// Очки в групповых заездах
+		/// </summary>
+		public int ScoreInGroupRace { get; set; }
 	}
 }
