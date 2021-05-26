@@ -57,7 +57,7 @@ namespace CarBot.Races
 				if (groupRace == null) return;
 				string uri = url + groupRace.Id.ToString();
 				var groupRaceParticipant = context.GroupRaceParticipant.Where(x => x.GroupRace.Id == groupRace.Id).ToList();
-				var message = "Через {0} минут стартует группой заезд, дивизион: {2}. Текущее количество участников: {3}, {1}".Format(minutesLeft, uri,
+				var message = "Через {0} минут стартует группой заезд, дивизион: {2}. Для вступления команда !join. Текущее количество участников: {3}, {1}".Format(minutesLeft, uri,
 																								groupRace.RaceDivision.GetDisplayName(), groupRaceParticipant.Count);
 				bot.SendMessage(channel, message);
 			}
@@ -89,12 +89,14 @@ namespace CarBot.Races
 
 				var participents = groupRaceParticipants;
 
-				var userCars = participents
-					.Select(x => context.Cars.GetUserCar(x.User))
+				var userCars = context.Cars
+					.Where(x => x.IsActive && participents.Any(y => y.User.Id == x.User.Id))
+					.Include(x => x.Auto)
+					.OrderByDescending(x => x.BuyDate)
 					.ToList();
 
 				var userResults = participents
-					.Select(x => GetRaceResult(x, userCars.FirstOrDefault(x => x.User == x.User)))
+					.Select(x => GetRaceResult(x, userCars.Where(x => x.User == x.User).FirstOrDefault()))
 					.OrderByDescending(x => x.Speed)
 					.ToList();
 

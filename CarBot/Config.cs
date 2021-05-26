@@ -12,6 +12,7 @@ namespace CarBot
         public static string BotName { get; private set; }
         public static string Channel { get; private set; }
         public static string OAuth { get; private set; }
+        public static string OAuthPubSub { get; private set; }
         public static string Url { get; private set; }
 
         public static string ShopPath { get; private set; }
@@ -35,6 +36,7 @@ namespace CarBot
             BotName = config.GetSection("TwitchSettings:BotName").Value;
             Channel = config.GetSection("TwitchSettings:Channel").Value;
             OAuth = config.GetSection("TwitchSettings:OAuth").Value;
+            OAuthPubSub = config.GetSection("TwitchSettings:OAuthPubSub").Value;
             Url = config.GetSection("Url").Value;
             ShopPath = Path.Combine(Directory.GetCurrentDirectory(), "AutoShop.json");
 

@@ -3,14 +3,16 @@ using System;
 using CarBot.DBContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CarBot.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210523151309_2021052300")]
+    partial class _2021052300
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,9 +72,6 @@ namespace CarBot.Migrations
                     b.Property<string>("Hash")
                         .HasColumnType("longtext");
 
-                    b.Property<bool?>("IsFinished")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<int>("RaceDivision")
                         .HasColumnType("int");
 
@@ -102,17 +101,12 @@ namespace CarBot.Migrations
                     b.Property<int>("Score")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserCarId")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserId")
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GroupRaceId");
-
-                    b.HasIndex("UserCarId");
 
                     b.HasIndex("UserId");
 
@@ -188,20 +182,11 @@ namespace CarBot.Migrations
                     b.Property<int>("Attentiveness")
                         .HasColumnType("int");
 
-                    b.Property<int>("Courage")
-                        .HasColumnType("int");
-
                     b.Property<int>("Cunning")
                         .HasColumnType("int");
 
                     b.Property<long>("Experience")
                         .HasColumnType("bigint");
-
-                    b.Property<int>("GroupRaceCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("GroupRaceVictories")
-                        .HasColumnType("int");
 
                     b.Property<string>("Login")
                         .HasColumnType("longtext");
@@ -211,6 +196,9 @@ namespace CarBot.Migrations
 
                     b.Property<long>("Money")
                         .HasColumnType("bigint");
+
+                    b.Property<int>("RaceCount")
+                        .HasColumnType("int");
 
                     b.Property<int>("RaceCountWithAI")
                         .HasColumnType("int");
@@ -227,16 +215,13 @@ namespace CarBot.Migrations
                     b.Property<int>("TestDrivesCount")
                         .HasColumnType("int");
 
+                    b.Property<int>("Victories")
+                        .HasColumnType("int");
+
                     b.Property<int>("VictoriesWithAI")
                         .HasColumnType("int");
 
-                    b.Property<int>("VictoriesWithAIEasy")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VictoriesWithAIHard")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VictoriesWithAINormal")
+                    b.Property<int>("Сourage")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -277,12 +262,8 @@ namespace CarBot.Migrations
             modelBuilder.Entity("CarBot.Models.GroupRaceParticipant", b =>
                 {
                     b.HasOne("CarBot.Models.GroupRace", "GroupRace")
-                        .WithMany()
+                        .WithMany("Participants")
                         .HasForeignKey("GroupRaceId");
-
-                    b.HasOne("CarBot.Models.UserCar", "UserCar")
-                        .WithMany()
-                        .HasForeignKey("UserCarId");
 
                     b.HasOne("CarBot.Models.User", "User")
                         .WithMany()
@@ -291,8 +272,6 @@ namespace CarBot.Migrations
                     b.Navigation("GroupRace");
 
                     b.Navigation("User");
-
-                    b.Navigation("UserCar");
                 });
 
             modelBuilder.Entity("CarBot.Models.History", b =>
@@ -332,6 +311,11 @@ namespace CarBot.Migrations
                     b.Navigation("Auto");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("CarBot.Models.GroupRace", b =>
+                {
+                    b.Navigation("Participants");
                 });
 #pragma warning restore 612, 618
         }

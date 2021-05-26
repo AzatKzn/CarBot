@@ -112,7 +112,7 @@ namespace CarBot
 
 		private void onPubSubServiceConnected(object sender, EventArgs e)
 		{
-			client.SendTopics("tj1yzfx8dkta7nsvft33fmf07fje7o");
+			client.SendTopics(Config.OAuthPubSub);
 			Logger.LogRewardInfo("Connected to reward channel for {0}".Format(Config.Channel));
 		}
 	}

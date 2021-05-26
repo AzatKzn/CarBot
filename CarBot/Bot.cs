@@ -171,9 +171,15 @@ namespace CarBot
                     try
                     {
                         GroupRaceHandler.CreateRace(channel, this, division);
+                        Thread.Sleep(TimeSpan.FromMinutes(2));
+                        GroupRaceHandler.GroupRaceInfo(channel, this, 8);
                         Thread.Sleep(TimeSpan.FromMinutes(5));
                         GroupRaceHandler.GroupRaceInfo(channel, this, 5);
-                        Thread.Sleep(TimeSpan.FromMinutes(5));
+                        Thread.Sleep(TimeSpan.FromMinutes(2));
+                        GroupRaceHandler.GroupRaceInfo(channel, this, 3);
+                        Thread.Sleep(TimeSpan.FromMinutes(2));
+                        GroupRaceHandler.GroupRaceInfo(channel, this, 1);
+                        Thread.Sleep(TimeSpan.FromMinutes(1));
                         UpdateDivision(ref division);
                         GroupRaceHandler.GroupRaceResult(channel, this);
                         Thread.Sleep(TimeSpan.FromMinutes(19));
@@ -186,6 +192,7 @@ namespace CarBot
                             var grouprace = context.GroupRaces.GetNotFinished();
                             grouprace.IsFinished = true;
                             context.SaveChanges();
+                            groupRaceIsOn = false;
                             Logger.LogInfo("GroupRace Id = {0}".Format(grouprace.Id));
 						}
 					}

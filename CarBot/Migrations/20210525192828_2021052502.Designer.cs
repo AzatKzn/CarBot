@@ -3,14 +3,16 @@ using System;
 using CarBot.DBContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CarBot.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210525192828_2021052502")]
+    partial class _2021052502
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -228,15 +230,6 @@ namespace CarBot.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("VictoriesWithAI")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VictoriesWithAIEasy")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VictoriesWithAIHard")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VictoriesWithAINormal")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

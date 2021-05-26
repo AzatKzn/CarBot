@@ -3,14 +3,16 @@ using System;
 using CarBot.DBContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CarBot.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210525183818_2021052501")]
+    partial class _2021052501
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,17 +104,12 @@ namespace CarBot.Migrations
                     b.Property<int>("Score")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserCarId")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserId")
                         .HasColumnType("varchar(255)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GroupRaceId");
-
-                    b.HasIndex("UserCarId");
 
                     b.HasIndex("UserId");
 
@@ -230,15 +227,6 @@ namespace CarBot.Migrations
                     b.Property<int>("VictoriesWithAI")
                         .HasColumnType("int");
 
-                    b.Property<int>("VictoriesWithAIEasy")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VictoriesWithAIHard")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VictoriesWithAINormal")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.ToTable("Users");
@@ -280,10 +268,6 @@ namespace CarBot.Migrations
                         .WithMany()
                         .HasForeignKey("GroupRaceId");
 
-                    b.HasOne("CarBot.Models.UserCar", "UserCar")
-                        .WithMany()
-                        .HasForeignKey("UserCarId");
-
                     b.HasOne("CarBot.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
@@ -291,8 +275,6 @@ namespace CarBot.Migrations
                     b.Navigation("GroupRace");
 
                     b.Navigation("User");
-
-                    b.Navigation("UserCar");
                 });
 
             modelBuilder.Entity("CarBot.Models.History", b =>

@@ -1,0 +1,34 @@
+﻿@*
+	For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<table>
+	<tr>
+		<th>Логин</th>
+		<th>Опыт</th>
+		<th>Деньги</th>
+		<th>Внимательность</th>
+		<th>Скорость реакции</th>
+		<th>Смелость</th>
+		<th>Хитрость</th>
+		<th>Тест драйвов</th>
+		<th>Гонок с ИИ</th>
+		<th>Групповые гонки</th>
+	</tr>
+	@foreach (var u in ViewBag.Users)
+	{
+		<tr>
+			<td>@u.Login</td>
+			<td>@u.Experience</td>
+			<td>@u.Money</td>
+			<td>@u.Attentiveness</td>
+			<td>@u.SpeedReaction</td>
+			<td>@u.Courage</td>
+			<td>@u.Cunning</td>
+			<td>@u.RaceCountWithAI</td>
+			<td>@u.TestDrivesCount</td>			
+		</tr>
+
+	}
+</table>
