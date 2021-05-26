@@ -6,53 +6,49 @@
 
 @if (ViewBag.IsFinished)
 {
-	<div>Результаты гонки под номером @ViewBag.Id. Дивизион: "@ViewBag.Division"</div>
+<div>Результаты гонки под номером @ViewBag.Id. Дивизион: "@ViewBag.Division"</div>
 }
 else
 {
-	<div>Участники гонки по номером @ViewBag.Id. Дивизион: "@ViewBag.Division"</div>
+<div>
+	Участники гонки по номером @ViewBag.Id. Дивизион: "@ViewBag.Division.
+</div>
 }
 
 <div>
 	<table>
 		<tr>
 			<th style="padding: 12px 17px;">Логин</th>
-			@if (ViewBag.IsFinished)
-			{
-				<th style="padding: 12px 17px;">Авто</th>
-			}
+			<th style="padding: 12px 17px;">Авто</th>			
 			<th style="padding: 12px 17px;">Внимательность</th>
 			<th style="padding: 12px 17px;">Скорость реакции</th>
 			<th style="padding: 12px 17px;">Смелость</th>
 			<th style="padding: 12px 17px;">Хитрость</th>
 			@if (ViewBag.IsFinished)
 			{
-				<th style="padding: 12px 17px;">Опыт</th>
-				<th style="padding: 12px 17px;">Деньги</th>
-				<th style="padding: 12px 17px;">Очки</th>
-				<th style="padding: 12px 17px;">Место</th>
+			<th style="padding: 12px 17px;">Опыт</th>
+			<th style="padding: 12px 17px;">Деньги</th>
+			<th style="padding: 12px 17px;">Очки</th>
+			<th style="padding: 12px 17px;">Место</th>
 			}
 		</tr>
 		@foreach (var p in ViewBag.Participants)
 		{
-			<tr>
-				<td style="padding: 12px 17px;">@p.User.Login</td>
-				@if (ViewBag.IsFinished)
+		<tr>
+			<td style="padding: 12px 17px;">@p.User.Login</td>
+			<td style="padding: 12px 17px;">@p.UserCar.Auto.Name</td>				
+			<td style="padding: 12px 17px;">@p.User.Attentiveness</td>
+			<td style="padding: 12px 17px;">@p.User.SpeedReaction</td>
+			<td style="padding: 12px 17px;">@p.User.Courage</td>
+			<td style="padding: 12px 17px;">@p.User.Cunning</td>
+			@if (ViewBag.IsFinished)
 				{
-					<td style="padding: 12px 17px;">@p.UserCar.Auto.Name</td>
+			<td style="padding: 12px 17px;">@p.Experience</td>
+			<td style="padding: 12px 17px;">@p.Money</td>
+			<td style="padding: 12px 17px;">@p.Score</td>
+			<td style="padding: 12px 17px;">@p.Place</td>
 				}
-				<td style="padding: 12px 17px;">@p.User.Attentiveness</td>
-				<td style="padding: 12px 17px;">@p.User.SpeedReaction</td>
-				<td style="padding: 12px 17px;">@p.User.Courage</td>
-				<td style="padding: 12px 17px;">@p.User.Cunning</td>
-				@if (ViewBag.IsFinished)
-				{
-					<td style="padding: 12px 17px;">@p.Experience</td>
-					<td style="padding: 12px 17px;">@p.Money</td>
-					<td style="padding: 12px 17px;">@p.Score</td>
-					<td style="padding: 12px 17px;">@p.Place</td>
-				}
-			</tr>
+		</tr>
 		}
 	</table>
 </div>

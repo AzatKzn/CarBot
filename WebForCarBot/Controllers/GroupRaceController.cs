@@ -25,14 +25,14 @@ namespace WebForCarBot.Controllers
 			var isFinished = groupRaces.IsFinished.HasValue && groupRaces.IsFinished.Value;
 
 			if (isFinished)
-				participants = participants.OrderBy(x => x.Place).ToList();
-
-			participants = participants.OrderBy(x => x.Place).ToList();
+			{
+				participants = participants.OrderBy(x => x.Place).ToList();			
+			}
 
 			ViewBag.Participants = participants;
 			ViewBag.Id = groupRaces.Id;
 			ViewBag.Division = groupRaces.RaceDivision.GetDisplayName();
-			ViewBag.IsFinished = isFinished;
+			ViewBag.IsFinished = participants.Any(x => x.Place != 0);
 			return View();
 		}
 

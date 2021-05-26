@@ -26,7 +26,6 @@ namespace CarBot.Races
 		private class UserRaceResult
 		{
 			public User User { get; set; }
-			public UserCar UserCar { get; set; }
 			public Reward Reward { get; set; }
 			public int Speed { get; set; }
 		}
@@ -73,7 +72,11 @@ namespace CarBot.Races
 				var groupRace = context.GroupRaces.GetNotFinished();
 				groupRace.IsFinished = true;
 				context.SaveChanges();
-				var groupRaceParticipants = context.GroupRaceParticipant.Where(x => x.GroupRace.Id == groupRace.Id).Include(x => x.User).ToList();
+				var groupRaceParticipants = context.GroupRaceParticipant
+					.Where(x => x.GroupRace.Id == groupRace.Id)
+					.Include(x => x.User)
+					.Include(x => x.UserCar).ThenInclude(x => x.Auto)
+					.ToList();
 				if (groupRaceParticipants.Count < 4)
 				{
 					bot.SendMessage(channel, "Гонка отменена. Недостаточно участников (необходимо минимум 3).");
@@ -89,18 +92,11 @@ namespace CarBot.Races
 
 				var participents = groupRaceParticipants;
 
-				var userCars = context.Cars
-					.Where(x => x.IsActive && participents.Any(y => y.User.Id == x.User.Id))
-					.Include(x => x.Auto)
-					.OrderByDescending(x => x.BuyDate)
-					.ToList();
-
 				var userResults = participents
-					.Select(x => GetRaceResult(x, userCars.Where(x => x.User == x.User).FirstOrDefault()))
+					.Select(x => GetRaceResult(x))
 					.OrderByDescending(x => x.Speed)
 					.ToList();
 
-				userCars.ForEach(x => x.Strength--);
 				UpdateUsers(userResults, groupRace.RaceDivision);
 
 				participents.ForEach(x =>
@@ -111,7 +107,7 @@ namespace CarBot.Races
 					x.Money = result.Reward.Money;
 					x.Experience = result.Reward.Experience;
 					x.Place = result.Reward.Place;
-					x.UserCar = result.UserCar;
+					x.UserCar.Strength--;
 					x.User.GroupRaceCount++;
 					x.User.Experience += result.Reward.Experience;
 					x.User.Money += result.Reward.Money;
@@ -120,7 +116,7 @@ namespace CarBot.Races
 				var first = participents.Where(x => x.Place == 1).FirstOrDefault();
 				first.User.GroupRaceVictories++;
 				context.SaveChanges();
-				message = "Результаты гонки: {0}. Победитель - @{1}.".Format(url + groupRace.Id.ToString(), first.User.Login);
+				message = "Результаты гонки: {0} . Победитель - @{1}.".Format(url + groupRace.Id.ToString(), first.User.Login);
 				bot.SendMessage(channel, message);
 			}
 		}
@@ -306,10 +302,11 @@ namespace CarBot.Races
 		/// <summary>
 		/// Рассчитать результат участника гонки 
 		/// </summary>
-		static UserRaceResult GetRaceResult(GroupRaceParticipant raceParticipant, UserCar userCar)
+		static UserRaceResult GetRaceResult(GroupRaceParticipant raceParticipant)
 		{
 			var user = raceParticipant.User;
-			return new UserRaceResult() { User = user, UserCar = userCar, Speed = GetSpeed(user, userCar) };
+			UserCar userCar = raceParticipant.UserCar;
+			return new UserRaceResult() { User = user, Speed = GetSpeed(user, userCar) };
 		}
 
 		/// <summary>
@@ -348,7 +345,7 @@ namespace CarBot.Races
 					return;
 				user.Login = e.ChatMessage.Username;
 				user.Money -= groupRace.RaceDivision.GetJoinCost();
-				var s = new GroupRaceParticipant() { GroupRace = groupRace, User = user };
+				var s = new GroupRaceParticipant() { GroupRace = groupRace, User = user, UserCar = userCar };
 				context.GroupRaceParticipant.Add(s);
 				context.SaveChanges();
 			}
