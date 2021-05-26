@@ -5,14 +5,14 @@ using System.IO;
 
 namespace CarBot
 {
-	static class Config
+	public static class Config
 	{
         public static string ConnectionString { get; private set; }
         public static bool IsNeedUpdateDatabase { get; private set; }
         public static string BotName { get; private set; }
         public static string Channel { get; private set; }
         public static string OAuth { get; private set; }
-        
+        public static string Url { get; private set; }
 
         public static string ShopPath { get; private set; }
         public static int TestDriveTimeOutMinutes { get; private set; }
@@ -35,6 +35,7 @@ namespace CarBot
             BotName = config.GetSection("TwitchSettings:BotName").Value;
             Channel = config.GetSection("TwitchSettings:Channel").Value;
             OAuth = config.GetSection("TwitchSettings:OAuth").Value;
+            Url = config.GetSection("Url").Value;
             ShopPath = Path.Combine(Directory.GetCurrentDirectory(), "AutoShop.json");
 
             TestDriveTimeOutMinutes = Convert.ToInt32(config.GetSection("TestDriveTimeOutMinutes").Value);

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CarBot.Models
 {
-	class RewardHistory
+	public class RewardHistory
 	{
 		public virtual int Id { get; set; }
 

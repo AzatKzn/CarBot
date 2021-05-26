@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace CarBot.DbSetExtensions
 {
-	static class UserExtensions
+	public static class UserExtensions
 	{
 		/// <summary>
 		/// Получить пользователя

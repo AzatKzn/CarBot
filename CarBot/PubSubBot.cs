@@ -71,7 +71,10 @@ namespace CarBot
 			{
 				var user = context.Users.GetByLogin(e.Login);
 				if (user == null)
+				{
 					LogInfo(e);
+					return;
+				}
 				if (isExp)
 					user.Experience += sum;
 				else
@@ -110,7 +113,7 @@ namespace CarBot
 		private void onPubSubServiceConnected(object sender, EventArgs e)
 		{
 			client.SendTopics("tj1yzfx8dkta7nsvft33fmf07fje7o");
-			Logger.LogRewardInfo("Connected to channel");
+			Logger.LogRewardInfo("Connected to reward channel for {0}".Format(Config.Channel));
 		}
 	}
 }

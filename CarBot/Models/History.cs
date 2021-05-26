@@ -8,7 +8,7 @@ namespace CarBot.Models
 		RaceWithAI = 20,
 	}
 
-	class History
+	public class History
 	{
 		public int Id { get; set; }
 

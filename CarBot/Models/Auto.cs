@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CarBot.Models
 {
-    class Auto
+    public class Auto
     {
         public int Id { get; set; }
         

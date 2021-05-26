@@ -132,7 +132,7 @@ namespace CarBot
 			switch (auto.Property?.ToLower())
 			{
 				case "cunning":
-					isEnough = user.Сunning >= auto.PropertyValue;
+					isEnough = user.Cunning >= auto.PropertyValue;
 					prop = "хитрость";
 					break;
 				case "perception":
@@ -144,7 +144,7 @@ namespace CarBot
 					prop = "скорость реакции";
 					break;
 				case "courage":
-					isEnough = user.Сourage >= auto.PropertyValue;
+					isEnough = user.Courage >= auto.PropertyValue;
 					prop = "смелость";
 					break;
 			}

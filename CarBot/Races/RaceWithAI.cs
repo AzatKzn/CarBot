@@ -34,7 +34,7 @@ namespace CarBot.Races
 				}
 
 				var history = context.Histories.GetLastUserHistory(user, ActionType.RaceWithAI);
-				TimeSpan timeLeft = new TimeSpan();				
+				TimeSpan timeLeft = new TimeSpan();
 				if (!CanRaceWithAI(history, ref timeLeft))
 				{
 					var left = "@{0}, следующая гонка с ИИ будет доступна через {1}.".Format(e.ChatMessage.Username, timeLeft.ToString("mm\\:ss"));
@@ -81,14 +81,21 @@ namespace CarBot.Races
 			if (isWin)
 			{
 				message = "@{0}, ты выиграл в гонке с компьютером и получил {1} опыта и {2} денег".Format(user.Login, reward, money);
-				user.VictoriesWithAI++;
+				if (comp == Complexity.Hard)
+					user.VictoriesWithAIHard++;
+				else if (comp == Complexity.Easy)
+					user.VictoriesWithAIEasy++;
+				else if (comp == Complexity.Normal)
+					user.VictoriesWithAINormal++;
+				else
+					user.VictoriesWithAI++;
 			}
 			else
 				message = "@{0}, ты проиграл в гонке с компьютером, утешительный приз - {1} опыта и {2} денег".Format(user.Login, reward, money);
 			user.RaceCountWithAI++;
 			user.Experience += reward;
 			user.Money += money;
-			
+
 			return message;
 		}
 
@@ -134,7 +141,7 @@ namespace CarBot.Races
 				reward = random.Next(550 + luck * 15, 700 + luck * 8);
 			else if (speed >= 600)
 				reward = random.Next(350 + luck * 15, 500 + luck * 8);
-			else 
+			else
 				reward = random.Next(150 + luck * 10, 350 + luck * 5);
 			return false;
 		}
@@ -175,7 +182,7 @@ namespace CarBot.Races
 		}
 
 		static bool EasyRace(int speed, int luck, ref int reward)
-		{			
+		{
 			Random random = new Random();
 			int k = 0;
 			if (speed < 300)
@@ -204,7 +211,7 @@ namespace CarBot.Races
 		{
 			var car = userCar.Auto;
 			return user.Attentiveness * car.Speed + user.SpeedReaction * car.Mobility +
-					user.Сunning * car.Overclocking + user.Сourage * car.Braking;
+					user.Cunning * car.Overclocking + user.Courage * car.Braking;
 		}
 
 		static bool TryGetComplexity(string message, out Complexity comp)

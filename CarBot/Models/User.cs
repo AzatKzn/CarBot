@@ -2,7 +2,7 @@
 
 namespace CarBot.Models
 {
-	class User
+	public class User
 	{
 		/// <summary>
 		/// Ид 
@@ -27,12 +27,12 @@ namespace CarBot.Models
 		/// <summary>
 		/// Количество гонок
 		/// </summary>
-		public int RaceCount { get; set; }
+		public int GroupRaceCount { get; set; }
 
 		/// <summary>
 		/// Побед
 		/// </summary>
-		public int Victories { get; set; }
+		public int GroupRaceVictories { get; set; }
 
 		/// <summary>
 		/// Количество гонок с ИИ
@@ -43,6 +43,21 @@ namespace CarBot.Models
 		/// Побед с ИИ
 		/// </summary>
 		public int VictoriesWithAI { get; set; }
+
+		/// <summary>
+		/// Побед с ИИ Easy
+		/// </summary>
+		public int VictoriesWithAIEasy { get; set; }
+
+		/// <summary>
+		/// Побед с ИИ Normal
+		/// </summary>
+		public int VictoriesWithAINormal { get; set; }
+
+		/// <summary>
+		/// Побед с ИИ Hard
+		/// </summary>
+		public int VictoriesWithAIHard { get; set; }
 
 		/// <summary>
 		/// Внимательность
@@ -57,12 +72,12 @@ namespace CarBot.Models
 		/// <summary>
 		/// Хитрость
 		/// </summary>
-		public int Сunning { get; set; }
+		public int Cunning { get; set; }
 
 		/// <summary>
 		/// Смелость
 		/// </summary>
-		public int Сourage { get; set; }
+		public int Courage { get; set; }
 
 		/// <summary>
 		/// Удача

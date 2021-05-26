@@ -8,6 +8,9 @@ using TwitchLib.Communication.Models;
 using CarBot.Races;
 using TwitchLib.Communication.Events;
 using CarBot.BaseTypesExtensions;
+using System.Threading;
+using CarBot.DBContexts;
+using CarBot.DbSetExtensions;
 
 namespace CarBot
 {
@@ -17,8 +20,11 @@ namespace CarBot
         readonly string BotName = Config.BotName;
         readonly string OAuth = Config.OAuth;
         readonly string ChannelName = Config.Channel;
-        public bool IsOn => isOn;
         bool isOn = true;
+        bool groupRaceIsOn = false;
+
+        public bool IsOn => isOn;
+        public bool RaceGroupIsOn => groupRaceIsOn;
 
         public Bot()
         {
@@ -57,7 +63,7 @@ namespace CarBot
         {
             foreach(var channel in client.JoinedChannels)
             {
-                Console.WriteLine("Connected to channel: {0}.", channel?.Channel);
+                Logger.LogInfo("Connected to channel: {0}.".Format(channel?.Channel));
 			}
 		}
 
@@ -85,8 +91,8 @@ namespace CarBot
                             UserActions.ShowInfo(e, this);
                             break;
                         case "!join":  // присоединение к групповому заеду
-                            //GroupRaceHandler.JoinToRace(e, this);
-                            break;
+							GroupRaceHandler.JoinToRace(e, this);
+							break;
                         case "!shop": // доступные для покупки машины
                             ShopAction.ShowCarsForSale(e, this);
                             break;                        
@@ -113,10 +119,6 @@ namespace CarBot
                                 {
                                     ShopAction.BuyAuto(e, this);
                                 }
-                                else if (message.StartsWith("!top")) // показ топа игроков
-                                {
-                                    Tops.ShowTop(e, this);
-                                }
 
                                 AdminCommands(e);
                                 break;
@@ -142,13 +144,70 @@ namespace CarBot
                         break;
                     case "!on":
                         isOn = true;
-                        SendMessage(e.ChatMessage.Channel, "Бот включен!!!");
+                        SendMessage(e.ChatMessage.Channel, "Бот включен!!!");                        
                         break;
                     case "!off":
                         isOn = false;
+                        groupRaceIsOn = false;
                         SendMessage(e.ChatMessage.Channel, "Бот выключен!!!");
                         break;
+                    case "!racestart":
+                        if (groupRaceIsOn)
+                            return;
+                        groupRaceIsOn = true;
+                        GroupRaceControl(e.ChatMessage.Channel);
+                        break;
                 }
+            }
+        }
+
+        async void GroupRaceControl(string channel)
+        {
+            await Task.Run(() =>
+            {
+                Models.RaceDivision division = Models.RaceDivision.Common;
+                while (groupRaceIsOn)
+                {
+                    try
+                    {
+                        GroupRaceHandler.CreateRace(channel, this, division);
+                        Thread.Sleep(TimeSpan.FromMinutes(5));
+                        GroupRaceHandler.GroupRaceInfo(channel, this, 5);
+                        Thread.Sleep(TimeSpan.FromMinutes(5));
+                        UpdateDivision(ref division);
+                        GroupRaceHandler.GroupRaceResult(channel, this);
+                        Thread.Sleep(TimeSpan.FromMinutes(19));
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Log(ex);
+                        using (var context = new AppDbContext())
+                        {
+                            var grouprace = context.GroupRaces.GetNotFinished();
+                            grouprace.IsFinished = true;
+                            context.SaveChanges();
+                            Logger.LogInfo("GroupRace Id = {0}".Format(grouprace.Id));
+						}
+					}
+                }
+            });
+		}
+
+        void UpdateDivision(ref Models.RaceDivision raceDivision)
+        {
+            Random random = new Random();
+            var next = random.Next() % 2;
+            if (raceDivision == Models.RaceDivision.Common)
+            {
+                raceDivision = next == 0 ? Models.RaceDivision.Newbie : Models.RaceDivision.Pro;
+            }
+            else if (raceDivision == Models.RaceDivision.Newbie)
+            {
+                raceDivision = next == 0 ? Models.RaceDivision.Pro : Models.RaceDivision.Common;
+            }
+            else if (raceDivision == Models.RaceDivision.Pro)
+            {
+                raceDivision = next == 0 ? Models.RaceDivision.Common : Models.RaceDivision.Newbie;
             }
         }
 

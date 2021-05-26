@@ -1,23 +1,27 @@
 ﻿using CarBot.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace CarBot.DbSetExtensions
 {
-	static class GroupRaceExtensions
+	public static class GroupRaceExtensions
 	{
-		public static GroupRace CreateAndAddGroupRace(this DbSet<GroupRace> groupRaces)
+		public static GroupRace CreateAndAddGroupRace(this DbSet<GroupRace> groupRaces, RaceDivision raceDivision)
 		{
-			var groupRace = new GroupRace() { Participants = new List<GroupRaceParticipant>(), CreateDate = DateTime.Now };
+			var groupRace = new GroupRace
+			{ 
+				CreateDate = DateTime.Now,
+				RaceDivision = raceDivision
+			};
+
 			groupRaces.Add(groupRace);
 			return groupRace;
 		}
 
-		public static GroupRace Get(this DbSet<GroupRace> groupRaces, int id)
+		public static GroupRace GetNotFinished(this DbSet<GroupRace> groupRaces)
 		{
-			return groupRaces.Where(x => x.Id == id).FirstOrDefault();
+			return groupRaces.Where(x => x.IsFinished.HasValue && !x.IsFinished.Value).FirstOrDefault();
 		}
 	}
 }

@@ -46,8 +46,8 @@ namespace CarBot.Races
 			var random = new Random();
 			double atten = (100 + user.Attentiveness * random.Next(0, 3)) / (double)100;
 			double react = (100 + user.SpeedReaction * random.Next(0, 4)) / (double)100;
-			double courage = (100 + user.Сourage * random.Next(-3, 10)) / (double)100;
-			double cunning = (100 + user.Сunning * random.Next(1, 4)) / (double)100;
+			double courage = (100 + user.Courage * random.Next(-3, 10)) / (double)100;
+			double cunning = (100 + user.Cunning * random.Next(1, 4)) / (double)100;
 			if (atten > 1.3)
 				atten = 1.3;
 			if (react > 1.3)

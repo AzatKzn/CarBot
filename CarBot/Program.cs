@@ -9,11 +9,11 @@ using System.Threading;
 
 namespace CarBot
 {
-	class Program
+	public class Program
 	{	
 		static int count = 0;
 		internal static int Minutes { get; set; }
-		static void Main(string[] args)
+		public static void Main(string[] args)
 		{
 			try
 			{

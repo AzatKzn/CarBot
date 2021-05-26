@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace CarBot.DbSetExtensions
 {
-	static class HistoryExtensions
+	public static class HistoryExtensions
 	{
 		/// <summary>
 		/// Получить последнюю историю действий пользователя с датой

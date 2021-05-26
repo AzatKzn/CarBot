@@ -105,24 +105,24 @@ namespace CarBot
                     }
                 case "cunning":
                     {
-                        isCanUpdate = IsEnoughMoney(user.Experience, user.Сunning, out remove);
+                        isCanUpdate = IsEnoughMoney(user.Experience, user.Cunning, out remove);
                         if (isCanUpdate)
                         {
                             user.Experience -= remove;
-                            user.Сunning++;
-                            newLVL = user.Сunning;                            
+                            user.Cunning++;
+                            newLVL = user.Cunning;                            
                         }
                         propertyRu = "хитрость";
                         break;
                     }
                 case "boldness":
                     {
-                        isCanUpdate = IsEnoughMoney(user.Experience, user.Сourage, out remove);
+                        isCanUpdate = IsEnoughMoney(user.Experience, user.Courage, out remove);
                         if (isCanUpdate)
                         {
                             user.Experience -= remove;
-                            user.Сourage++;
-                            newLVL = user.Сourage;                            
+                            user.Courage++;
+                            newLVL = user.Courage;                            
                         }
                         propertyRu = "смелость";
                         break;
@@ -228,8 +228,8 @@ namespace CarBot
                 Experience = 100,
                 Attentiveness = 1,
                 SpeedReaction = 1,
-                Сunning = 1,
-                Сourage = 1,
+                Cunning = 1,
+                Courage = 1,
                 Luck = 1,
                 RegistrationDate = DateTime.Now
             };
@@ -250,7 +250,7 @@ namespace CarBot
                 var info = "@{0}, Гонок c ИИ - {1}({2}), Тест драйвов - {10}, Внимательность - {3}, Скорость реакции {4}, " +
                                 "Смелость - {5}, Хитрость - {6}, Удача - {7}, Опыт - {8}, Деньги - {9}";
                 info = info.Format(user.Login, user.RaceCountWithAI, user.VictoriesWithAI, user.Attentiveness, user.SpeedReaction,
-                                     user.Сourage, user.Сunning, user.Luck, user.Experience, user.Money, user.TestDrivesCount);
+                                     user.Courage, user.Cunning, user.Luck, user.Experience, user.Money, user.TestDrivesCount);
                 bot.SendMessage(e.ChatMessage.Channel, info);
             }
         }

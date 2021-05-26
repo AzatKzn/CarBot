@@ -4,7 +4,7 @@ using System;
 
 namespace CarBot.DBContexts
 {
-	class AppDbContext : DbContext
+	public class AppDbContext : DbContext
 	{
 		public DbSet<User> Users { get; set; }
 
