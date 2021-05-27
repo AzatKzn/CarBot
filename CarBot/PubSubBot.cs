@@ -19,10 +19,19 @@ namespace CarBot
 		{
 			client = new TwitchPubSub();
 			client.OnPubSubServiceConnected += onPubSubServiceConnected;
-			client.OnPubSubServiceClosed += onPubSubServiceDisConnected;
+			client.OnPubSubServiceClosed += onPubSubServiceDisconnected;
 			client.OnRewardRedeemed += OnRewardRedeemed;
+			client.OnListenResponse += OnListenResponse;
 			client.ListenToRewards("142647519");
 			client.Connect();
+		}
+
+		private void OnListenResponse(object sender, OnListenResponseArgs e)
+		{
+			if (e.Successful)
+				Logger.LogRewardInfo("{0} : Success".Format(e.Topic));
+			else
+				Logger.LogRewardInfo("{0} : {1}".Format(e.Topic, e.Response.Error));
 		}
 
 		private void OnRewardRedeemed(object sender, OnRewardRedeemedArgs e)
@@ -48,7 +57,7 @@ namespace CarBot
 						Upgrade(e, false, 30000);
 					else if (e.RewardTitle.Contains("70к денег в игре") || e.RewardId.ToString().ToLower() == "fe8df898-1f48-474c-bce4-334c707f9e72")
 						Upgrade(e, false, 70000);
-					else if(e.RewardCost >= 10000)
+					else if (e.RewardCost >= 10000)
 						LogInfo(e);
 				}
 				catch (Exception ex)
@@ -95,7 +104,7 @@ namespace CarBot
 			}
 		}
 
-		private void onPubSubServiceDisConnected(object sender, EventArgs e)
+		private void onPubSubServiceDisconnected(object sender, EventArgs e)
 		{
 			try
 			{
